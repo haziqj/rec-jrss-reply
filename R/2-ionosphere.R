@@ -44,7 +44,7 @@ rp.lda5.mean <- c(13.05, 10.75, 9.78)
 rp.lda5.se   <- c(0.38, 0.25, 0.26)
 rp.lda5      <- meanAndSE(rp.lda5.mean, rp.lda5.se)
 rp.qda5.mean <- c(8.14, 6.15, 5.21)
-rp.qda5.se   <- c(0.37, 0.37, 5.21)
+rp.qda5.se   <- c(0.37, 0.37, 0.20)
 rp.qda5      <- meanAndSE(rp.qda5.mean, rp.qda5.se)
 rp.knn5.mean <- c(13.05, 7.43, 5.43)
 rp.knn5.se   <- c(0.46, 0.25, 0.19)
@@ -55,6 +55,8 @@ colnames(rp.tab) <- colnames(tab$tab)
 # Calculate ranks
 tab.mean <- rbind(tab$tab.mean, "RP-LDA5" = rp.lda5.mean,
                   "RP-QDA5" = rp.qda5.mean, "RP-knn5" = rp.knn5.mean)
+tab.se <- rbind(tab$tab.se, "RP-LDA5" = rp.lda5.se,
+                "RP-QDA5" = rp.qda5.se, "RP-knn5" = rp.knn5.se)
 tab.ranks <- tabRank(tab.mean)
 
 # Tabulate results
@@ -62,3 +64,6 @@ tab.all <- cbind(rbind(tab$tab, rp.tab), Rank = tab.ranks)
 knitr::kable(tab.all, align = "r")
 
 # Plot
+plotRes()
+
+
