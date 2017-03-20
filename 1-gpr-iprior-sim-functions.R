@@ -1,6 +1,22 @@
 # Require iprior v0.6.4.9002 or higher for GPR support
 library(iprior)
 library(RPEnsemble)
+library(ggplot2)
+
+# Function to specify decimal places
+decPlac <- function(x, k = 2) format(round(x, k), nsmall = k)
+
+# Function to combine mean and se
+meanAndSE <- function(x, y) paste0(decPlac(x, 2), " (", decPlac(y, 2), ")")
+
+# Function to calculate ranks
+tabRank <- function(x) {
+  tmp <- lapply(x, FUN = rank, ties.method = "min")
+  tmp.mat <- matrix(unlist(tmp), ncol = length(tmp), byrow = FALSE)
+  res <- rank(apply(tmp.mat, 1, sum), ties.method = "min")
+  names(res) <- rownames(x)
+  res
+}
 
 # Function to create test and train set
 testTrain <- function(n = 50, seed = NULL) {
@@ -20,19 +36,24 @@ testTrain <- function(n = 50, seed = NULL) {
 tabRes <- function(...) {
   this <- list(...)
   K <- length(this)
-  tab <- NULL
+  tab.mean <- tab.se <- tab <- NULL
 
   for (k in 1:K) {
-    tab.mean <- apply(this[[k]], 2, mean)
-    tab.se <- apply(this[[k]], 2, sd) / 10
-    tab.mean.and.se <- paste0(round(tab.mean, 2), " (",
-                              round(tab.se, 2), ")")
+    tab.mean.tmp <- apply(this[[k]], 2, mean)
+    tab.se.tmp <- apply(this[[k]], 2, sd) / 10
+    tab.mean.and.se <- meanAndSE(tab.mean.tmp, tab.se.tmp)
+    tab.mean <- rbind(tab.mean, tab.mean.tmp)
+    tab.se <- rbind(tab.se, tab.se.tmp)
     tab <- rbind(tab, tab.mean.and.se)
   }
 
-  rownames(tab) <- names(this)
-  colnames(tab) <- colnames(this[[1]])
-  as.data.frame(tab)
+  rownames(tab.mean) <- rownames(tab.se) <- rownames(tab) <- names(this)
+  colnames(tab.mean) <- colnames(tab.se) <- colnames(tab) <- colnames(this[[1]])
+  list(
+    tab = as.data.frame(tab),
+    tab.mean = as.data.frame(tab.mean),
+    tab.se = as.data.frame(tab.se)
+  )
 }
 
 # Function for inner simulations
@@ -87,4 +108,28 @@ mySim <- function(y = y, X = X.orig, nsim = 100, n = c(50, 100, 200),
   res.tmp
 }
 # mySim(nsim = 1)
+
+# Function to plot
+plotRes <- function() {
+  suppressMessages(
+    plot.df <- reshape2::melt(cbind(tab.mean, id = rownames(tab.mean)))
+  )
+  id2 <- plot.df$id
+  id2.GPR <- grep("GPR", id2)
+  id2.Iprior <- grep("I-prior", id2)
+  id2 <- rep(1, length(id2))
+  id2[id2.GPR] <- 2
+  id2[id2.Iprior] <- 3
+  id2 <- as.factor(id2)
+  suppressMessages(
+    plot.se <- reshape2::melt(tab.se)
+  )
+  plot.df <- cbind(plot.df, se = plot.se[, 2], id2 = id2)
+  ggplot(plot.df, aes(x = value, y = id, col = id2)) +
+    geom_point() +
+    facet_grid(. ~ variable) +
+    geom_errorbarh(aes(xmin = value - 1.96 * se, xmax = value + 1.96 * se,
+                       height = 0)) +
+    labs(x = "Misclassification rate", y = NULL) + guides(col = FALSE)
+}
 
