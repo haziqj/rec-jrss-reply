@@ -3,11 +3,22 @@ library(iprior)
 library(RPEnsemble)
 library(ggplot2)
 
+# For push notifications
+userID <- "uyq2g37vnityt1b3yvpyicv6o9h456"
+appToken <- "avxnrig1qppsgsw9woghwwmxsobo4a"
+
 # Function to specify decimal places
 decPlac <- function(x, k = 2) format(round(x, k), nsmall = k)
 
 # Function to combine mean and se
 meanAndSE <- function(x, y) paste0(decPlac(x, 2), " (", decPlac(y, 2), ")")
+
+# Function to return 0 or 1 from linear fit
+classLin <- function(x) {
+  tmp <- rep(0, length(x))
+  tmp[x >= 0.5] <- 1
+  tmp
+}
 
 # Function to calculate ranks
 tabRank <- function(x) {
@@ -19,7 +30,7 @@ tabRank <- function(x) {
 }
 
 # Function to create test and train set
-testTrain <- function(n = 50, seed = NULL) {
+testTrain <- function(n, seed = NULL) {
   if (!is.null(seed)) set.seed(seed)
   train.index <- sample(1:length(y), size = n, replace = FALSE)
   test.index <- (1:length(y))[-train.index]
@@ -66,7 +77,7 @@ innerSim <- function(n, kernel, ipriorfunction, gpr, fbmoptim = FALSE) {
   } else {
     mod <- ipriorfunction(mod, control = list(silent = TRUE))
   }
-  y.test <- round(predict(mod, newdata = list(dat$X.test)))
+  y.test <- classLin(predict(mod, newdata = list(dat$X.test)))
   sum(y.test != dat$y.test) / (N - n) * 100
 }
 # innerSim(50, "FBM", fbmOptim, gpr = FALSE, fbmoptim = TRUE)
@@ -95,7 +106,7 @@ mySim <- function(y = y, X = X.orig, nsim = 100, n = c(50, 100, 200),
   }
 
   count <- 0
-  for (i in staring:nsim) {
+  for (i in starting:nsim) {
     for (j in 1:length(n)) {
       res.tmp[i, j] <- innerSim(n[j], kernel = kernel, ipriorfunction = ipriorfn,
                                 gpr = gpr, fbmoptim = fbmoptim)
@@ -105,6 +116,10 @@ mySim <- function(y = y, X = X.orig, nsim = 100, n = c(50, 100, 200),
   }
   close(pb)
 
+  push.message <- paste0(
+    experiment.name, ": ", type, ifelse(gpr, " GPR", " I-prior"), " COMPLETED."
+  )
+  pushoverr::pushover(message = push.message, user = userID, app = appToken)
   res.tmp
 }
 # mySim(nsim = 1)
@@ -132,4 +147,3 @@ plotRes <- function() {
                        height = 0)) +
     labs(x = "Misclassification rate", y = NULL) + guides(col = FALSE)
 }
-
