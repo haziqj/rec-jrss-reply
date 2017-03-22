@@ -2,7 +2,6 @@
 library(iprior)
 library(RPEnsemble)
 library(ggplot2)
-# library(parallel)
 library(foreach)
 library(doSNOW)
 no.cores <- detectCores() / 2
@@ -90,7 +89,7 @@ innerSim <- function(y.innerSim, X.innerSim, n.innerSim, kernel,
 # innerSim(50, "FBM", fbmOptim, gpr = FALSE, fbmoptim = TRUE)
 
 # Function for GPR/I-prior simulations (parallelised)
-mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n = c(50, 100, 200),
+mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n = n,
                   type = c("linear", "fbm", "fbmoptim"), gpr = FALSE) {
   type <- match.arg(type, c("linear", "fbm", "fbmoptim"))
   pb <- txtProgressBar(min = 0, max = nsim, style = 3)

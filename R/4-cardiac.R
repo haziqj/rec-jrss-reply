@@ -21,6 +21,7 @@ X.orig <- ArrhDataNew$x
 y <- ArrhDataNew$y
 y <- y - 1  # convert to 0 and 1
 N <- length(y)
+n <- c(50, 100, 200)  # subsamples
 
 # Simulations
 res.gprlin <- mySim(type = "linear", gpr = TRUE)  # linear GPR
@@ -39,14 +40,14 @@ tab <- tabRes("GPR (linear)"      = res.gprlin,
               "I-prior (FBM MLE)" = res.ipfbmoptim)
 
 # Results from REC
-rp.lda5.mean <- c(13.05, 10.75, 9.78)
-rp.lda5.se   <- c(0.38, 0.25, 0.26)
+rp.lda5.mean <- c(33.24, 30.19, 27.49)
+rp.lda5.se   <- c(0.42, 0.35, 0.30)
 rp.lda5      <- meanAndSE(rp.lda5.mean, rp.lda5.se)
-rp.qda5.mean <- c(8.14, 6.15, 5.21)
-rp.qda5.se   <- c(0.37, 0.37, 0.20)
+rp.qda5.mean <- c(30.47, 28.28, 26.31)
+rp.qda5.se   <- c(0.33, 0.26, 0.28)
 rp.qda5      <- meanAndSE(rp.qda5.mean, rp.qda5.se)
-rp.knn5.mean <- c(13.05, 7.43, 5.43)
-rp.knn5.se   <- c(0.46, 0.25, 0.19)
+rp.knn5.mean <- c(33.49, 30.18, 27.09)
+rp.knn5.se   <- c(0.40, 0.33, 0.31)
 rp.knn5      <- meanAndSE(rp.knn5.mean, rp.knn5.se)
 rp.tab <- rbind("RP-LDA5" = rp.lda5, "RP-QDA5" = rp.qda5, "RP-knn5" = rp.knn5)
 colnames(rp.tab) <- colnames(tab$tab)
