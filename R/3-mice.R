@@ -27,7 +27,7 @@ N <- length(y)
 n <- c(100, 200, 500)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(nsim = 1, type = "linear", gpr = TRUE, n = n)  # linear GPR
+res.gprlin <- mySim(nsim = 4, type = "linear", gpr = TRUE, n = n)  # linear GPR
 res.gprfbm <- mySim(type = "fbm", gpr = TRUE, n = n)  # FBM GPR
 res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, n = n)  # FBM optim GPR
 

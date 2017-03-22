@@ -1,7 +1,8 @@
 # Load functions
-source("1-gpr-iprior-sim-functions.R")
+source("R/1-gpr-iprior-sim-functions.R")
 
-# Ionosphere data (https://archive.ics.uci.edu/ml/datasets/Ionosphere) This
+experiment.name <- "Ionosphere data"
+# (https://archive.ics.uci.edu/ml/datasets/Ionosphere) This
 # radar data was collected by a system in Goose Bay, Labrador. This system
 # consists of a phased array of 16 high-frequency antennas with a total
 # transmitted power on the order of 6.4 kilowatts. See the paper for more
@@ -16,7 +17,7 @@ source("1-gpr-iprior-sim-functions.R")
 # signal.
 # Binary classification task: "good (0)" or "bad (1)"
 # p = 34 (radar data), N = 350
-ion <- read.table("ionosphere.data.txt", sep = ",", header = TRUE)
+ion <- read.table("data/ionosphere.data.txt", sep = ",", header = TRUE)
 summary(ion$g)
 X.orig <- as.matrix(ion[, -35])
 y <- as.numeric(ion$g)

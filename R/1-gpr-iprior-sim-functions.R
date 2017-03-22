@@ -2,6 +2,10 @@
 library(iprior)
 library(RPEnsemble)
 library(ggplot2)
+# library(parallel)
+library(foreach)
+library(doSNOW)
+no.cores <- detectCores() / 2
 
 # For push notifications
 userID <- "uyq2g37vnityt1b3yvpyicv6o9h456"
@@ -30,17 +34,19 @@ tabRank <- function(x) {
 }
 
 # Function to create test and train set
-testTrain <- function(n, seed = NULL) {
+testTrain <- function(n.testTrain, y.testTrain, X.testTrain, seed = NULL) {
   if (!is.null(seed)) set.seed(seed)
-  train.index <- sample(1:length(y), size = n, replace = FALSE)
-  test.index <- (1:length(y))[-train.index]
+  train.index <- sample(1:length(y.testTrain), size = n.testTrain,
+                        replace = FALSE)
+  test.index <- (1:length(y.testTrain))[-train.index]
 
-  X.train <- X[train.index, ]
-  y.train <- y[train.index]
-  X.test <- X[test.index, ]
-  y.test <- y[test.index]
+  X.train <- X.testTrain[train.index, ]
+  y.train <- y.testTrain[train.index]
+  X.test <- X.testTrain[test.index, ]
+  y.test <- y.testTrain[test.index]
 
-  list(X.train = X.train, y.train = y.train, X.test = X.test, y.test = y.test)
+  list(X.train = X.train, y.train = y.train, X.test = X.test, y.test = y.test,
+       N = length(y.testTrain))
 }
 
 # Function to tabulate mean and se
@@ -68,8 +74,9 @@ tabRes <- function(...) {
 }
 
 # Function for inner simulations
-innerSim <- function(n, kernel, ipriorfunction, gpr, fbmoptim = FALSE) {
-  dat <- testTrain(n = n)
+innerSim <- function(y.innerSim, X.innerSim, n.innerSim, kernel,
+                     ipriorfunction, gpr, fbmoptim = FALSE) {
+  dat <- testTrain(n.innerSim, y.innerSim, X.innerSim)
   mod <- kernL(dat$y.train, dat$X.train,
                model = list(kernel = kernel, rootkern = gpr))
   if (fbmoptim) {
@@ -78,18 +85,16 @@ innerSim <- function(n, kernel, ipriorfunction, gpr, fbmoptim = FALSE) {
     mod <- ipriorfunction(mod, control = list(silent = TRUE))
   }
   y.test <- classLin(predict(mod, newdata = list(dat$X.test)))
-  sum(y.test != dat$y.test) / (N - n) * 100
+  sum(y.test != dat$y.test) / (dat$N - n.innerSim) * 100
 }
 # innerSim(50, "FBM", fbmOptim, gpr = FALSE, fbmoptim = TRUE)
 
-# Function for GPR/I-prior simulations
-mySim <- function(y = y, X = X.orig, nsim = 100, n = c(50, 100, 200),
-                  type = c("linear", "fbm", "fbmoptim"), gpr = FALSE,
-                  starting = 1) {
+# Function for GPR/I-prior simulations (parallelised)
+mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n = c(50, 100, 200),
+                  type = c("linear", "fbm", "fbmoptim"), gpr = FALSE) {
   type <- match.arg(type, c("linear", "fbm", "fbmoptim"))
-  res.tmp <- matrix(NA, ncol = length(n), nrow = nsim)
-  colnames(res.tmp) <- paste0(c("n = "), n)
-  pb <- txtProgressBar(min = 0, max = nsim * length(n), style = 3)
+  pb <- txtProgressBar(min = 0, max = nsim, style = 3)
+  progress <- function(i) setTxtProgressBar(pb, i)
 
   ipriorfn <- ipriorOptim
   fbmoptim <- FALSE
@@ -105,22 +110,32 @@ mySim <- function(y = y, X = X.orig, nsim = 100, n = c(50, 100, 200),
     fbmoptim <- TRUE
   }
 
-  count <- 0
-  for (i in starting:nsim) {
+  cl <- makeCluster(no.cores)
+  registerDoSNOW(cl)
+  res <- foreach(i = 1:nsim, .combine = rbind,
+                 .packages = c("iprior"),
+                 .export = c("innerSim", "classLin", "testTrain"),
+                 .options.snow = list(progress = progress)) %dopar%
+    {
+    res.tmp <- rep(NA, length(n))
     for (j in 1:length(n)) {
-      res.tmp[i, j] <- innerSim(n[j], kernel = kernel, ipriorfunction = ipriorfn,
-                                gpr = gpr, fbmoptim = fbmoptim)
-      count <- count + 1
-      setTxtProgressBar(pb, count)
+      res.tmp[j]  <- innerSim(y.mySim, X.mySim, n[j], kernel = kernel,
+                              ipriorfunction = ipriorfn, gpr = gpr,
+                              fbmoptim = fbmoptim)
     }
+    res.tmp
   }
   close(pb)
+  stopCluster(cl)
+  save.image(experiment.name)
 
   push.message <- paste0(
     experiment.name, ": ", type, ifelse(gpr, " GPR", " I-prior"), " COMPLETED."
   )
   pushoverr::pushover(message = push.message, user = userID, app = appToken)
-  res.tmp
+
+  colnames(res) <- paste0(c("n = "), n)
+  res
 }
 # mySim(nsim = 1)
 
