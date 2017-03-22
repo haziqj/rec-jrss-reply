@@ -16,7 +16,7 @@
 
 # Mice protein expressions (N = 528, p = 77)
 
-*Notes: missing data removed*
+*Notes: missing data removed.*
 
 |                 |      n = 100|      n = 200|      n = 500| Rank|
 |:----------------|------------:|------------:|------------:|----:|
