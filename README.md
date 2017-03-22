@@ -1,4 +1,4 @@
-# Ionosphere data
+# Ionosphere data (N = 350, p = 34)
 
 |                  |       n = 50|      n = 100|      n = 200| Rank|
 |:-----------------|------------:|------------:|------------:|----:|
@@ -14,7 +14,9 @@
 
 ![](figure/ionosphere.png)
 
-# Mice protein expressions
+# Mice protein expressions (N = 528, p = 77)
+
+*Notes: missing data removed*
 
 |                 |      n = 100|      n = 200|      n = 500| Rank|
 |:----------------|------------:|------------:|------------:|----:|
