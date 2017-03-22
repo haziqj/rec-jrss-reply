@@ -1,7 +1,7 @@
 # Load functions
 source("R/1-gpr-iprior-sim-functions.R")
 
-experiment.name <- "Cardiac data"
+experiment.name <- "Hill-valley data"
 # (https://archive.ics.uci.edu/ml/datasets/Arrhythmia) This database contains
 # 279 attributes, 206 of which are linear valued and the rest are nominal.
 # Concerning the study of H. Altay Guvenir: "The aim is to distinguish between
@@ -13,15 +13,15 @@ experiment.name <- "Cardiac data"
 # cardiolog's and the programs classification. Taking the cardiolog's as a gold
 # standard we aim to minimise this difference by means of machine learning
 # tools."
-# Binary classification task: "normal (0)" or "arrhythmia (1)" p = 194 (ECG
+# Binary classification task: "normal (0)" or "arrhythmia (1)" p = 100 (ECG
 # measurements), N = 451
-load("data/Arrh194.RData")
-summary(as.factor(ArrhDataNew$y))
-X.orig <- ArrhDataNew$x
-y <- ArrhDataNew$y
+load("data/Hill.RData")
+summary(as.factor(HillData$y))
+X.orig <- HillData$x
+y <- HillData$y
 y <- y - 1  # convert to 0 and 1
 N <- length(y)
-n <- c(50, 100, 200)  # subsamples
+n <- c(100, 200, 500)  # subsamples
 
 # Simulations
 res.gprlin <- mySim(type = "linear", gpr = TRUE)  # linear GPR

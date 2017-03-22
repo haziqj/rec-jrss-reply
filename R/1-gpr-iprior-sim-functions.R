@@ -24,8 +24,8 @@ classLin <- function(x) {
 }
 
 # Function to calculate ranks
-tabRank <- function(x) {
-  tmp <- lapply(x, FUN = rank, ties.method = "min")
+tabRank <- function(x, y) {
+  tmp <- lapply(x + y, FUN = rank, ties.method = "min")
   tmp.mat <- matrix(unlist(tmp), ncol = length(tmp), byrow = FALSE)
   res <- rank(apply(tmp.mat, 1, sum), ties.method = "min")
   names(res) <- rownames(x)
@@ -89,7 +89,7 @@ innerSim <- function(y.innerSim, X.innerSim, n.innerSim, kernel,
 # innerSim(50, "FBM", fbmOptim, gpr = FALSE, fbmoptim = TRUE)
 
 # Function for GPR/I-prior simulations (parallelised)
-mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n = n,
+mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
                   type = c("linear", "fbm", "fbmoptim"), gpr = FALSE) {
   type <- match.arg(type, c("linear", "fbm", "fbmoptim"))
   pb <- txtProgressBar(min = 0, max = nsim, style = 3)
@@ -116,9 +116,9 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n = n,
                  .export = c("innerSim", "classLin", "testTrain"),
                  .options.snow = list(progress = progress)) %dopar%
     {
-    res.tmp <- rep(NA, length(n))
-    for (j in 1:length(n)) {
-      res.tmp[j]  <- innerSim(y.mySim, X.mySim, n[j], kernel = kernel,
+    res.tmp <- rep(NA, length(n.mySim))
+    for (j in 1:length(n.mySim)) {
+      res.tmp[j]  <- innerSim(y.mySim, X.mySim, n.mySim[j], kernel = kernel,
                               ipriorfunction = ipriorfn, gpr = gpr,
                               fbmoptim = fbmoptim)
     }
@@ -133,7 +133,7 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n = n,
   )
   pushoverr::pushover(message = push.message, user = userID, app = appToken)
 
-  colnames(res) <- paste0(c("n = "), n)
+  colnames(res) <- paste0(c("n = "), n.mySim)
   res
 }
 # mySim(nsim = 1)
