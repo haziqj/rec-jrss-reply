@@ -38,6 +38,9 @@ testTrain <- function(n.testTrain, y.testTrain, X.testTrain, seed = NULL) {
   train.index <- sample(1:length(y.testTrain), size = n.testTrain,
                         replace = FALSE)
   test.index <- (1:length(y.testTrain))[-train.index]
+  if (length(test.index) > 1000) {
+    test.index <- sample(test.index, size = 1000, replace = FALSE)
+  }
 
   X.train <- X.testTrain[train.index, ]
   y.train <- y.testTrain[train.index]
