@@ -1,26 +1,25 @@
 # Load functions
-source("1-gpr-iprior-sim-functions.R")
+source("R/1-gpr-iprior-sim-functions.R")
 
-# Ionosphere data (https://archive.ics.uci.edu/ml/datasets/Ionosphere) This
-# radar data was collected by a system in Goose Bay, Labrador. This system
-# consists of a phased array of 16 high-frequency antennas with a total
-# transmitted power on the order of 6.4 kilowatts. See the paper for more
-# details. The targets were free electrons in the ionosphere. "Good" radar
-# returns are those showing evidence of some type of structure in the
-# ionosphere. "Bad" returns are those that do not; their signals pass through
-# the ionosphere. Received signals were processed using an autocorrelation
-# function whose arguments are the time of a pulse and the pulse number. There
-# were 17 pulse numbers for the Goose Bay system. Instances in this databse are
-# described by 2 attributes per pulse number, corresponding to the complex
-# values returned by the function resulting from the complex electromagnetic
-# signal.
-# Binary classification task: "good (0)" or "bad (1)"
-# p = 34 (radar data), N = 350
-ion <- read.table("ionosphere.data.txt", sep = ",", header = TRUE)
-summary(ion$g)
-X.orig <- as.matrix(ion[, -35])
-y <- as.numeric(ion$g)
-y[y == 2] <- 0  # convert good = 0
+experiment.name <- "Cardiac data"
+# (https://archive.ics.uci.edu/ml/datasets/Arrhythmia) This database contains
+# 279 attributes, 206 of which are linear valued and the rest are nominal.
+# Concerning the study of H. Altay Guvenir: "The aim is to distinguish between
+# the presence and absence of cardiac arrhythmia and to classify it in one of
+# the 16 groups. Class 01 refers to 'normal' ECG classes 02 to 15 refers to
+# different classes of arrhythmia and class 16 refers to the rest of
+# unclassified ones. For the time being, there exists a computer program that
+# makes such a classification. However there are differences between the
+# cardiolog's and the programs classification. Taking the cardiolog's as a gold
+# standard we aim to minimise this difference by means of machine learning
+# tools."
+# Binary classification task: "normal (0)" or "arrhythmia (1)" p = 194 (ECG
+# measurements), N = 451
+load("data/Arrh194.RData")
+summary(as.factor(ArrhDataNew$y))
+X.orig <- ArrhDataNew$x
+y <- ArrhDataNew$y
+y <- y - 1  # convert to 0 and 1
 N <- length(y)
 
 # Simulations
