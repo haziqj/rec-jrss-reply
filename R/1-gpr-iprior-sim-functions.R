@@ -239,26 +239,28 @@ plotRes <- function() {
   id2.GPR <- grep("GPR", id2)
   id2.Iprior <- grep("I-prior \\(", id2)
   id2.IpriorProbit <- grep("I-prior probit", id2)
-  id2.RPGPR <- grep("RP-GPR", id2)
-  id2.RPIprior <- grep("RP-I-prior \\(", id2)
-  id2.RPIpriorProbit <- grep("RP-I-prior probit", id2)
+  id2.RPGPR <- grep("RP5-GPR", id2)
+  id2.RPIprior <- grep("RP5-I-prior \\(", id2)
+  id2.RPIpriorProbit <- grep("RP5-I-prior probit", id2)
   id2 <- rep(1, length(id2))
-  id2[id2.GPR] <- 2
+  id2[id2.GPR] <- 5
   id2[id2.Iprior] <- 3
-  id2[id2.IpriorProbit] <- 4
-  id2[id2.RPGPR] <- 5
-  id2[id2.RPIprior] <- 6
-  id2[id2.RPIpriorProbit] <- 7
+  id2[id2.IpriorProbit] <- 2
+  id2[id2.RPGPR] <- 4
+  # id2[id2.RPIprior] <- 6
+  # id2[id2.RPIpriorProbit] <- 7
   id2 <- as.factor(id2)
   suppressMessages(
     plot.se <- reshape2::melt(tab.se)
   )
   plot.df <- cbind(plot.df, se = plot.se[, 2], id2 = id2)
+  plot.df$id <- factor(plot.df$id, levels = rev(rownames(tab.all)))
+  # plot.df
   ggplot(plot.df, aes(x = value, y = id, col = id2)) +
     geom_point() +
-    facet_grid(. ~ variable) +
     geom_errorbarh(aes(xmin = value - 1.96 * se, xmax = value + 1.96 * se,
                        height = 0)) +
+    facet_grid(. ~ variable) +
     labs(x = "Misclassification rate", y = NULL) + guides(col = FALSE)
 }
 
