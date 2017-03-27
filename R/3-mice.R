@@ -27,20 +27,25 @@ N <- length(y)
 n <- c(100, 200, 500)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(nsim = 4, type = "linear", gpr = TRUE, n = n)  # linear GPR
-res.gprfbm <- mySim(type = "fbm", gpr = TRUE, n = n)  # FBM GPR
-res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, n = n)  # FBM optim GPR
+res.gprlin <- mySim(type = "linear", gpr = TRUE, n.mySim = n)  # linear GPR
+res.gprfbm <- mySim(type = "fbm", gpr = TRUE, n.mySim = n)  # FBM GPR
+res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, n.mySim = n)  # FBM optim GPR
 
-res.iplin <- mySim(type = "linear", n = n)  # Canonical I-prior
-res.ipfbm <- mySim(type = "fbm", n = n)  # FBM I-prior
-res.ipfbmoptim <- mySim(type = "fbmoptim", n = n)  # FBM optim I-prior
+res.iplin <- mySim(type = "linear", n.mySim = n)  # Canonical I-prior
+res.ipfbm <- mySim(type = "fbm", n.mySim = n)  # FBM I-prior
+res.ipfbmoptim <- mySim(type = "fbmoptim", n.mySim = n)  # FBM optim I-prior
+
+res.iprobitlin <- ipmySim()
+res.iprobitfbm <- ipmySim(type = "fbm")
 
 tab <- tabRes("GPR (linear)"      = res.gprlin,
               "GPR (FBM)"         = res.gprfbm,
               "GPR (FBM MLE)"     = res.gprfbmoptim,
               "I-prior (linear)"  = res.iplin,
               "I-prior (FBM)"     = res.ipfbm,
-              "I-prior (FBM MLE)" = res.ipfbmoptim)
+              "I-prior (FBM MLE)" = res.ipfbmoptim,
+              "I-prior probit (linear)" = res.iprobitlin,
+              "I-prior probit (FBM)"    = res.iprobitfbm)
 
 # Results from REC
 rp.lda5.mean <- c(NA, 25.17, 23.56)
@@ -60,7 +65,7 @@ tab.mean <- rbind(tab$tab.mean, "RP-LDA5" = rp.lda5.mean,
                   "RP-QDA5" = rp.qda5.mean, "RP-knn5" = rp.knn5.mean)
 tab.se <- rbind(tab$tab.se, "RP-LDA5" = rp.lda5.se,
                 "RP-QDA5" = rp.qda5.se, "RP-knn5" = rp.knn5.se)
-tab.ranks <- tabRank(tab.mean)
+tab.ranks <- tabRank(tab.mean, tab.se)
 
 # Tabulate results
 tab.all <- cbind(rbind(tab$tab, rp.tab), Rank = tab.ranks)

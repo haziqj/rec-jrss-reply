@@ -4,6 +4,7 @@ library(RPEnsemble)
 library(ggplot2)
 library(foreach)
 library(doSNOW)
+source("R/ipriorProbit.R")
 no.cores <- detectCores() / 2
 
 # For push notifications
@@ -89,7 +90,7 @@ innerSim <- function(y.innerSim, X.innerSim, n.innerSim, kernel,
   y.test <- classLin(predict(mod, newdata = list(dat$X.test)))
   sum(y.test != dat$y.test) / (dat$N - n.innerSim) * 100
 }
-# innerSim(50, "FBM", fbmOptim, gpr = FALSE, fbmoptim = TRUE)
+
 
 # Function for GPR/I-prior simulations (parallelised)
 mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
@@ -139,7 +140,95 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
   colnames(res) <- paste0(c("n = "), n.mySim)
   res
 }
-# mySim(nsim = 1)
+
+# Functions for simulations with random projections
+innerSimRP <- function(y.innerSim, X.innerSim, n.innerSim, kernel,
+                       ipriorfunction, gpr, fbmoptim = FALSE, B1.innerSim, B2.innerSim) {
+  dat <- testTrain(n.innerSim, y.innerSim, X.innerSim)
+  small.d <- 5
+  A <- RPGenerate(p = ncol(X.innerSim), d = small.d, B2 = B2.innerSim)
+  XRP <- lapply(1:B2.innerSim,
+                function(x, X = dat$X.train) X %*% A[, small.d * (x - 1) + 1:small.d])
+  XRP.error <- rep(NA, B2.innerSim)
+  y.test.lot <- matrix(NA, nrow = B1.innerSim, ncol = length(dat$y.test))
+  for (i in 1:B1.innerSim) {
+    for (j in 1:B2.innerSim) {
+      mod <- kernL(dat$y.train, XRP[[j]],
+                   model = list(kernel = kernel, rootkern = gpr))
+      if (fbmoptim) {
+        mod <- ipriorfunction(mod, silent = TRUE)
+      } else {
+        mod <- ipriorfunction(mod, control = list(silent = TRUE))
+      }
+      y.train <- classLin(fitted(mod))
+      XRP.error[j] <- mean(y.train != y.innerSim) * 100
+    }
+    minj <- which.min(XRP.error)
+    cols <- small.d * (minj - 1) + 1:small.d
+    mod <- kernL(dat$y.train, XRP[[minj]],
+                 model = list(kernel = kernel, rootkern = gpr))
+    if (fbmoptim) {
+      mod <- ipriorfunction(mod, silent = TRUE)
+    } else {
+      mod <- ipriorfunction(mod, control = list(silent = TRUE))
+    }
+    XRP.test <- dat$X.test %*% A[, cols]
+    y.test.lot[i, ] <- classLin(predict(mod, newdata = list(XRP.test)))
+  }
+  y.test <- classLin(apply(y.test.lot, 1, mean))
+  mean(y.test != dat$y.test) * 100
+}
+# innerSimRP(y, X.orig, 50, "Canonical", ipriorOptim, TRUE, B2 = 5, B1 = 2)
+
+# Functions for simulations with random projections
+mySimRP <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
+                    B1 = 30, B2 = 5, type = c("linear", "fbm", "fbmoptim"),
+                    gpr = FALSE) {
+  type <- match.arg(type, c("linear", "fbm", "fbmoptim"))
+  pb <- txtProgressBar(min = 0, max = nsim, style = 3)
+  progress <- function(i) setTxtProgressBar(pb, i)
+
+  ipriorfn <- ipriorOptim
+  fbmoptim <- FALSE
+  if (type == "linear") {
+    kernel <- "Canonical"
+  }
+  if (type == "fbm") {
+    kernel <- "FBM"
+  }
+  if (type == "fbmoptim") {
+    kernel <- "FBM"
+    ipriorfn <- fbmOptim
+    fbmoptim <- TRUE
+  }
+
+  cl <- makeCluster(no.cores)
+  registerDoSNOW(cl)
+  res <- foreach(i = 1:nsim, .combine = rbind,
+                 .packages = c("iprior", "RPEnsemble"),
+                 .export = c("innerSimRP", "classLin", "testTrain"),
+                 .options.snow = list(progress = progress)) %dopar% {
+    res.tmp <- rep(NA, length(n.mySim))
+    for (k in 1:length(n.mySim)) {
+      res.tmp[k]  <- innerSimRP(y.mySim, X.mySim, n.mySim[k], kernel = kernel,
+                                ipriorfunction = ipriorfn, gpr = gpr, B1.innerSim = B1,
+                                B2.innerSim = B2, fbmoptim = fbmoptim)
+    }
+    res.tmp
+  }
+  close(pb)
+  stopCluster(cl)
+  save.image(experiment.name)
+
+  push.message <- paste0(
+    experiment.name, ": ", type, ifelse(gpr, " RP-GPR", " RP-I-prior"), " COMPLETED."
+  )
+  pushoverr::pushover(message = push.message, user = userID, app = appToken)
+
+  colnames(res) <- paste0(c("n = "), n.mySim)
+  res
+}
+# mySimRP(y, X.orig, nsim = 4, n.mySim = n, B1 = 2, B2 = 5, "linear", gpr = TRUE)
 
 # Function to plot
 plotRes <- function() {
@@ -148,10 +237,18 @@ plotRes <- function() {
   )
   id2 <- plot.df$id
   id2.GPR <- grep("GPR", id2)
-  id2.Iprior <- grep("I-prior", id2)
+  id2.Iprior <- grep("I-prior \\(", id2)
+  id2.IpriorProbit <- grep("I-prior probit", id2)
+  id2.RPGPR <- grep("RP-GPR", id2)
+  id2.RPIprior <- grep("RP-I-prior \\(", id2)
+  id2.RPIpriorProbit <- grep("RP-I-prior probit", id2)
   id2 <- rep(1, length(id2))
   id2[id2.GPR] <- 2
   id2[id2.Iprior] <- 3
+  id2[id2.IpriorProbit] <- 4
+  id2[id2.RPGPR] <- 5
+  id2[id2.RPIprior] <- 6
+  id2[id2.RPIpriorProbit] <- 7
   id2 <- as.factor(id2)
   suppressMessages(
     plot.se <- reshape2::melt(tab.se)
@@ -164,3 +261,47 @@ plotRes <- function() {
                        height = 0)) +
     labs(x = "Misclassification rate", y = NULL) + guides(col = FALSE)
 }
+
+# I-prior probit innersim
+probitInnerSim <- function(y.innerSim, X.innerSim, n.innerSim, kernel) {
+  dat <- testTrain(n.innerSim, y.innerSim, X.innerSim)
+  mod <- iprobit(dat$y.train, dat$X.train, kernel = kernel, niter = 100)
+  y.test <- predict(mod, newdata = dat$X.test)$y
+  sum(y.test != dat$y.test) / (dat$N - n.innerSim) * 100
+}
+
+# I-prior probit simulation
+ipmySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
+                    type = c("linear", "fbm")) {
+  type <- match.arg(type, c("linear", "fbm"))
+  kernel <- ifelse(type == "fbm", "FBM", "Canonical")
+  pb <- txtProgressBar(min = 0, max = nsim, style = 3)
+  progress <- function(i) setTxtProgressBar(pb, i)
+
+  cl <- makeCluster(no.cores)
+  registerDoSNOW(cl)
+  res <- foreach(i = 1:nsim, .combine = rbind,
+                 .packages = c("iprior"),
+                 .export = c("testTrain", "probitInnerSim", "iprobit",
+                             "predict.ipriorProbit"),
+                 .options.snow = list(progress = progress)) %dopar% {
+    res.tmp <- rep(NA, length(n.mySim))
+    for (j in 1:length(n.mySim)) {
+      res.tmp[j]  <- probitInnerSim(y.mySim, X.mySim, n.mySim[j], kernel = kernel)
+      }
+      res.tmp
+  }
+  close(pb)
+  stopCluster(cl)
+  save.image(experiment.name)
+
+  push.message <- paste0(
+    experiment.name, ": ", type, "I-prior probit COMPLETED."
+  )
+  pushoverr::pushover(message = push.message, user = userID, app = appToken)
+
+  colnames(res) <- paste0(c("n = "), n.mySim)
+  res
+}
+
+
