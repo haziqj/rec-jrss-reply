@@ -1,4 +1,4 @@
-# Introduction
+## Introduction
 
 In reference to [1], we compare the peformance of binary classification using Gaussian process regression (GPR) against the method of random projection ensemble classification. GPR estimation algorithms are O(n^3), so it is possible to use the full dimension of the covariates as we are training the models on subsamples of size `n < 1000`. GPR models were fit using the `iprior` package (see [3]). We also sought to determine whether or not random projection ensembles would improve on GPR. The package in [2] provided the random projection matrices. The tables presented below are the misclassification rates (out of 100) along with the standard errors from repeating each experiment 100 times.
 
