@@ -114,6 +114,7 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
 
   this.exp <- paste0(experiment.name, ": ", type,
                      ifelse(gpr, " GPR", " I-prior"))
+  suppressWarnings(file.remove(paste0("save/", this.exp, ".csv")))
 
   cl <- makeCluster(no.cores)
   registerDoSNOW(cl)
@@ -207,7 +208,7 @@ mySimRP <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
 
   this.exp <- paste0(experiment.name, ": ", type,
                      ifelse(gpr, " RP-GPR", " RP-I-prior"))
-  file.remove(paste0("save/", this.exp, ".csv"))
+  suppressWarnings(file.remove(paste0("save/", this.exp, ".csv")))
 
   cl <- makeCluster(no.cores)
   registerDoSNOW(cl)

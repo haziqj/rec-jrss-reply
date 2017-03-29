@@ -2,7 +2,11 @@
 
 In reference to [1], we compare the peformance of binary classification using Gaussian process regression (GPR) against the method of random projection ensemble classification. GPR estimation algorithms are O(n^3), so it is possible to use the full dimension of the covariates as we are training the models on subsamples of size `n < 1000`. GPR models were fit using the `iprior` package (see [3]). We also sought to determine whether or not random projection ensembles would improve on GPR. The package in [2] provided the random projection matrices. The tables presented below are the misclassification rates (out of 100) along with the standard errors from repeating each experiment 100 times.
 
-# Ionosphere data (N = 350, p = 34)
+# Eye state detection (N = 14,980, p = 14)
+
+*TBC*
+
+# Ionosphere data set (N = 350, p = 34)
 
 |                        |       n = 50|      n = 100|      n = 200| Rank|
 |:-----------------------|------------:|------------:|------------:|----:|
@@ -21,6 +25,58 @@ In reference to [1], we compare the peformance of binary classification using Ga
 |RP5-knn                 | 13.05 (0.46)|  7.43 (0.25)|  5.43 (0.19)|    4|
 
 ![](figure/ionosphere.png)
+
+# Down’s syndrome diagnoses in mice (N = 528, p = 77)
+
+*Notes: missing data removed.*
+
+|                        |      n = 100|      n = 200|      n = 500| Rank|
+|:-----------------------|------------:|------------:|------------:|----:|
+|GPR (linear)            |  6.21 (0.23)|  3.16 (0.12)|  2.19 (0.19)|    5|
+|GPR (FBM)               |  8.50 (0.26)|  3.03 (0.15)|  0.25 (0.07)|    2|
+|GPR (FBM MLE)           |  4.47 (0.21)|  1.01 (0.11)|  0.00 (0.00)|    1|
+|I-prior (linear)        | 17.81 (1.11)|  4.53 (0.18)|  1.96 (0.18)|    6|
+|I-prior (FBM)           |  9.11 (0.62)|  3.15 (0.16)|  0.23 (0.07)|    3|
+|I-prior (FBM MLE)       |  9.92 (0.62)|  2.35 (0.14)|  0.31 (0.10)|    3|
+|I-prior probit (linear) | 22.61 (0.55)| 11.61 (0.23)|  4.04 (0.31)|    7|
+|I-prior probit (FBM)    | 23.96 (0.51)| 14.52 (0.30)|  6.21 (0.39)|    9|
+|RP-LDA5                 |    NA (  NA)| 25.17 (0.30)| 23.56 (0.26)|   11|
+|RP-QDA5                 |    NA (  NA)| 18.24 (0.29)| 16.05 (0.24)|   10|
+|RP-knn5                 |    NA (  NA)| 11.24 (0.29)|  2.24 (0.10)|    8|
+
+![](figure/mice.png)
+
+# Hill–valley identification (N = 1,212, p = 100)
+
+|                  |      n = 100|      n = 200|      n = 500| Rank|
+|:-----------------|------------:|------------:|------------:|----:|
+|GPR (linear)      | 50.15 (0.14)| 50.02 (0.20)| 48.48 (0.59)|    9|
+|GPR (FBM)         | 45.27 (0.09)| 49.78 (0.08)| 50.72 (0.12)|    7|
+|GPR (FBM MLE)     | 45.03 (0.09)| 49.73 (0.10)| 50.73 (0.13)|    6|
+|I-prior (linear)  | 44.80 (0.21)| 49.20 (0.29)| 50.18 (0.31)|    3|
+|I-prior (FBM)     | 45.34 (0.10)| 49.91 (0.08)| 50.69 (0.12)|    8|
+|I-prior (FBM MLE) | 45.43 (0.09)| 49.65 (0.10)| 50.68 (0.12)|    5|
+|RP-LDA5           | 36.84 (0.84)| 36.45 (0.85)| 32.57 (1.06)|    1|
+|RP-QDA5           | 44.43 (0.34)| 43.56 (0.31)| 41.10 (0.33)|    2|
+|RP-knn5           | 49.08 (0.24)| 47.27 (0.26)| 36.39 (0.29)|    4|
+
+![](figure/hill.png)
+
+# Musk identification (N = 6,597, p = 166)
+
+|                  |      n = 100|      n = 200|      n = 500| Rank|
+|:-----------------|------------:|------------:|------------:|----:|
+|GPR (linear)      |  2.21 (0.03)|  1.91 (0.04)|  1.44 (0.03)|    4|
+|GPR (FBM)         |  1.64 (0.03)|  1.18 (0.02)|  0.91 (0.01)|    1|
+|GPR (FBM MLE)     |  1.70 (0.04)|  1.23 (0.03)|  0.89 (0.01)|    2|
+|I-prior (linear)  |  2.38 (0.02)|  2.42 (0.02)|  2.43 (0.03)|    6|
+|I-prior (FBM)     |  2.36 (0.02)|  2.14 (0.04)|  1.91 (0.07)|    5|
+|I-prior (FBM MLE) |  2.06 (0.04)|  1.70 (0.04)|  1.28 (0.04)|    3|
+|RP-LDA5           | 14.63 (0.31)| 12.18 (0.23)| 10.15 (0.15)|    9|
+|RP-QDA5           | 12.08 (0.27)|  9.92 (0.18)|  8.64 (0.13)|    8|
+|RP-knn5           | 11.81 (0.27)|  9.65 (0.21)|  8.04 (0.15)|    7|
+
+![](figure/musk.png)
 
 # Cardiac arrhythmia data (N = 451, p = 194)
 
@@ -42,57 +98,13 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ![](figure/cardiac.png)
 
-# Mice protein expressions (N = 528, p = 77)
+# Human activity recognition (N = 2,633, p = 561)
 
-*Notes: missing data removed.*
+*TBC*
 
-|                        |      n = 100|      n = 200|      n = 500| Rank|
-|:-----------------------|------------:|------------:|------------:|----:|
-|GPR (linear)            |  6.21 (0.23)|  3.16 (0.12)|  2.19 (0.19)|    5|
-|GPR (FBM)               |  8.50 (0.26)|  3.03 (0.15)|  0.25 (0.07)|    2|
-|GPR (FBM MLE)           |  4.47 (0.21)|  1.01 (0.11)|  0.00 (0.00)|    1|
-|I-prior (linear)        | 17.81 (1.11)|  4.53 (0.18)|  1.96 (0.18)|    6|
-|I-prior (FBM)           |  9.11 (0.62)|  3.15 (0.16)|  0.23 (0.07)|    3|
-|I-prior (FBM MLE)       |  9.92 (0.62)|  2.35 (0.14)|  0.31 (0.10)|    3|
-|I-prior probit (linear) | 22.61 (0.55)| 11.61 (0.23)|  4.04 (0.31)|    7|
-|I-prior probit (FBM)    | 23.96 (0.51)| 14.52 (0.30)|  6.21 (0.39)|    9|
-|RP-LDA5                 |    NA (  NA)| 25.17 (0.30)| 23.56 (0.26)|   11|
-|RP-QDA5                 |    NA (  NA)| 18.24 (0.29)| 16.05 (0.24)|   10|
-|RP-knn5                 |    NA (  NA)| 11.24 (0.29)|  2.24 (0.10)|    8|
+# Handwritten digits (N = 1,500, p = 5000)
 
-![](figure/mice.png)
-
-# Musk data (N = 6597, p = 166)
-
-|                  |      n = 100|      n = 200|      n = 500| Rank|
-|:-----------------|------------:|------------:|------------:|----:|
-|GPR (linear)      |  2.21 (0.03)|  1.91 (0.04)|  1.44 (0.03)|    4|
-|GPR (FBM)         |  1.64 (0.03)|  1.18 (0.02)|  0.91 (0.01)|    1|
-|GPR (FBM MLE)     |  1.70 (0.04)|  1.23 (0.03)|  0.89 (0.01)|    2|
-|I-prior (linear)  |  2.38 (0.02)|  2.42 (0.02)|  2.43 (0.03)|    6|
-|I-prior (FBM)     |  2.36 (0.02)|  2.14 (0.04)|  1.91 (0.07)|    5|
-|I-prior (FBM MLE) |  2.06 (0.04)|  1.70 (0.04)|  1.28 (0.04)|    3|
-|RP-LDA5           | 14.63 (0.31)| 12.18 (0.23)| 10.15 (0.15)|    9|
-|RP-QDA5           | 12.08 (0.27)|  9.92 (0.18)|  8.64 (0.13)|    8|
-|RP-knn5           | 11.81 (0.27)|  9.65 (0.21)|  8.04 (0.15)|    7|
-
-![](figure/musk.png)
-
-# Hill-valley data (N = 1212, p = 100)
-
-|                  |      n = 100|      n = 200|      n = 500| Rank|
-|:-----------------|------------:|------------:|------------:|----:|
-|GPR (linear)      | 50.15 (0.14)| 50.02 (0.20)| 48.48 (0.59)|    9|
-|GPR (FBM)         | 45.27 (0.09)| 49.78 (0.08)| 50.72 (0.12)|    7|
-|GPR (FBM MLE)     | 45.03 (0.09)| 49.73 (0.10)| 50.73 (0.13)|    6|
-|I-prior (linear)  | 44.80 (0.21)| 49.20 (0.29)| 50.18 (0.31)|    3|
-|I-prior (FBM)     | 45.34 (0.10)| 49.91 (0.08)| 50.69 (0.12)|    8|
-|I-prior (FBM MLE) | 45.43 (0.09)| 49.65 (0.10)| 50.68 (0.12)|    5|
-|RP-LDA5           | 36.84 (0.84)| 36.45 (0.85)| 32.57 (1.06)|    1|
-|RP-QDA5           | 44.43 (0.34)| 43.56 (0.31)| 41.10 (0.33)|    2|
-|RP-knn5           | 49.08 (0.24)| 47.27 (0.26)| 36.39 (0.29)|    4|
-
-![](figure/hill.png)
+*TBC*
 
 # Experiment notes
 

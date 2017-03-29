@@ -1,31 +1,28 @@
 # Load functions
 source("R/1-gpr-iprior-sim-functions.R")
 
-experiment.name <- "Human activity recognition data"
-# The human activity recognition data set
-# (http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
-# consists of p = 561 accelerometer measurements, recorded from a smartphone
-# while a subject is performing an activity. We subsampled the data to include
-# only the walking and laying activities. In the resulting data set, there are
-# 1226 ‘walking’ observations (class 0), and 1407 ‘laying’ observations (class
-# 1). Binary classification task: "walking (0)" or "laying (1)" p =
-# 561 (accelerometer measurements), N = 2633
-load("data/HARWalkLay.RData")
-summary(as.factor(HAR2$y))
-X.orig <- HAR2$x
-y <- HAR2$y
-y <- y - 1  # convert to 0 and 1.
+experiment.name <- "Eye state detection data"
+# EEG Eye State Data Set (https://archive.ics.uci.edu/ml/datasets/EEG+Eye+State)
+# consists of p=14 electroencephalogram measurements on 14 980 observations. The
+# task is to use the electroencephalogram reading to determine the state of the
+# eye. There are 8256 observations for which the eye is open (class 0), and 6723
+# for which the eye is closed (class 1). Binary classification task: "eye open
+# (0)" or "eye closed (1)" p = 14 (accelerometer measurements), N = 14980
+eye <- read.table("data/EEG Eye State.arff.txt", sep = ",", skip = 19)
+summary(as.factor(eye[, 15]))
+X.orig <- eye[, -15]
+y <- eye[, 15]
 N <- length(y)
 n <- c(50, 200, 1000)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(type = "linear", gpr = TRUE)  # linear GPR
-res.gprfbm <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
-res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
+res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 16)  # linear GPR
+res.gprfbm <- mySim(type = "fbm", gpr = TRUE, nsim = 16)  # FBM GPR
+res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, nsim = 16)  # FBM optim GPR
 
-res.iplin <- mySim(type = "linear")  # Canonical I-prior
-res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
-res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
+res.iplin <- mySim(type = "linear", nsim = 16)  # Canonical I-prior
+res.ipfbm <- mySim(type = "fbm", nsim = 16)  # FBM I-prior
+res.ipfbmoptim <- mySim(type = "fbmoptim", nsim = 16)  # FBM optim I-prior
 
 tab <- tabRes("GPR (linear)"      = res.gprlin,
               "GPR (FBM-0.5)"     = res.gprfbm,

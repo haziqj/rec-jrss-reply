@@ -35,17 +35,12 @@ res.iplin <- mySim(type = "linear", n.mySim = n)  # Canonical I-prior
 res.ipfbm <- mySim(type = "fbm", n.mySim = n)  # FBM I-prior
 res.ipfbmoptim <- mySim(type = "fbmoptim", n.mySim = n)  # FBM optim I-prior
 
-res.iprobitlin <- ipmySim()
-res.iprobitfbm <- ipmySim(type = "fbm")
-
 tab <- tabRes("GPR (linear)"      = res.gprlin,
-              "GPR (FBM)"         = res.gprfbm,
-              "GPR (FBM MLE)"     = res.gprfbmoptim,
+              "GPR (FBM-0.5)"     = res.gprfbm,
+              "GPR (FBM-MLE)"     = res.gprfbmoptim,
               "I-prior (linear)"  = res.iplin,
-              "I-prior (FBM)"     = res.ipfbm,
-              "I-prior (FBM MLE)" = res.ipfbmoptim,
-              "I-prior probit (linear)" = res.iprobitlin,
-              "I-prior probit (FBM)"    = res.iprobitfbm)
+              "I-prior (FBM-0.5)" = res.ipfbm,
+              "I-prior (FBM-MLE)" = res.ipfbmoptim)
 
 # Results from REC
 rp.lda5.mean <- c(NA, 25.17, 23.56)

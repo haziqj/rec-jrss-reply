@@ -32,26 +32,12 @@ res.iplin <- mySim(type = "linear")  # Canonical I-prior
 res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
 res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 
-res.iprobitlin <- ipmySim()
-res.iprobitfbm <- ipmySim(type = "fbm")
-
-res.gprlinRP <- mySimRP(type = "linear", gpr = TRUE, nsim = 50)  # linear GPR with RP
-res.gprfbmRP <- mySimRP(type = "fbm", gpr = TRUE, nsim = 50)  # FBM GPR with RP
-# res.iplinRP <- mySimRP(type = "linear")  # Canonical I-prior with RP
-# res.ipfbmRP <- mySimRP(type = "fbm")  # FBM I-prior with RP
-
-tab <- tabRes("RP5-GPR (linear)"        = res.gprlinRP,
-              "RP5-GPR (FBM)"           = res.gprfbmRP,
-              "GPR (linear)"            = res.gprlin,
+tab <- tabRes("GPR (linear)"            = res.gprlin,
               "GPR (FBM)"               = res.gprfbm,
               "GPR (FBM MLE)"           = res.gprfbmoptim,
               "I-prior (linear)"        = res.iplin,
               "I-prior (FBM)"           = res.ipfbm,
-              "I-prior (FBM MLE)"       = res.ipfbmoptim,
-              "I-prior probit (linear)" = res.iprobitlin,
-              "I-prior probit (FBM)"    = res.iprobitfbm)
-# "RP5-I-prior (linear)"    = res.iplinRP,
-# "RP5-I-prior (FBM)"       = res.ipfbmRP)
+              "I-prior (FBM MLE)"       = res.ipfbmoptim)
 
 # Results from REC
 rp.lda5.mean <- c(13.05, 10.75, 9.78)

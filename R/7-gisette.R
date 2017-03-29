@@ -28,9 +28,6 @@ res.iplin <- mySim(type = "linear")  # Canonical I-prior
 res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
 res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 
-res.iprobitlin <- ipmySim()
-res.iprobitfbm <- ipmySim(type = "fbm")
-
 tab <- tabRes("GPR (linear)"      = res.gprlin,
               "GPR (FBM)"         = res.gprfbm,
               "GPR (FBM MLE)"     = res.gprfbmoptim,
