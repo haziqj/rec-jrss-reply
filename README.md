@@ -2,11 +2,11 @@
 
 In reference to [1], we compare the peformance of binary classification using Gaussian process regression (GPR) against the method of random projection ensemble classification. GPR estimation algorithms are O(n^3), so it is possible to use the full dimension of the covariates as we are training the models on subsamples of size `n < 1000`. GPR models were fit using the `iprior` package (see [3]). We also sought to determine whether or not random projection ensembles would improve on GPR. The package in [2] provided the random projection matrices. The tables presented below are the misclassification rates (out of 100) along with the standard errors from repeating each experiment 100 times.
 
-# Eye state detection (N = 14,980, p = 14)
+## Eye state detection (N = 14,980, p = 14)
 
 *TBC*
 
-# Ionosphere data set (N = 350, p = 34)
+## Ionosphere data set (N = 350, p = 34)
 
 |                        |       n = 50|      n = 100|      n = 200| Rank|
 |:-----------------------|------------:|------------:|------------:|----:|
@@ -26,7 +26,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ![](figure/ionosphere.png)
 
-# Down’s syndrome diagnoses in mice (N = 528, p = 77)
+## Down’s syndrome diagnoses in mice (N = 528, p = 77)
 
 *Notes: missing data removed.*
 
@@ -46,7 +46,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ![](figure/mice.png)
 
-# Hill–valley identification (N = 1,212, p = 100)
+## Hill–valley identification (N = 1,212, p = 100)
 
 |                  |      n = 100|      n = 200|      n = 500| Rank|
 |:-----------------|------------:|------------:|------------:|----:|
@@ -62,7 +62,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ![](figure/hill.png)
 
-# Musk identification (N = 6,597, p = 166)
+## Musk identification (N = 6,597, p = 166)
 
 |                  |      n = 100|      n = 200|      n = 500| Rank|
 |:-----------------|------------:|------------:|------------:|----:|
@@ -78,7 +78,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ![](figure/musk.png)
 
-# Cardiac arrhythmia data (N = 451, p = 194)
+## Cardiac arrhythmia data (N = 451, p = 194)
 
 |                        |       n = 50|      n = 100|      n = 200| Rank|
 |:-----------------------|------------:|------------:|------------:|----:|
@@ -98,15 +98,15 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ![](figure/cardiac.png)
 
-# Human activity recognition (N = 2,633, p = 561)
+## Human activity recognition (N = 2,633, p = 561)
 
 *TBC*
 
-# Handwritten digits (N = 1,500, p = 5000)
+## Handwritten digits (N = 1,500, p = 5000)
 
 *TBC*
 
-# Experiment notes
+## Experiment notes
 
 1. For each data set, a training set of size `n` was formed by subsampling the `N` observations. A GPR model was fitted on this training set, and the test classification rate (out of 100) was calculated on the remaining data (or where applicable, a subsample of size 1000). Each experiment was repeated 100 times.
 2. For RP-GPR, the data was projected to a smaller dimension of `d=5`. We were unable to use the default values for `B1` and `B2` as suggested in [1] due to time constraints. We resorted to using `B1 = 30` and `B2 = 5`.
