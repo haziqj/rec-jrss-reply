@@ -94,7 +94,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ![](figure/hill.png)
 
-## Experiment notes
+# Experiment notes
 
 1. For each data set, a training set of size `n` was formed by subsampling the `N` observations. A GPR model was fitted on this training set, and the test classification rate (out of 100) was calculated on the remaining data (or where applicable, a subsample of size 1000). Each experiment was repeated 100 times.
 2. For RP-GPR, the data was projected to a smaller dimension of `d=5`. We were unable to use the default values for `B1` and `B2` as suggested in [1] due to time constraints. We resorted to using `B1 = 30` and `B2 = 5`.
