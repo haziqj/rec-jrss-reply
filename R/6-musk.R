@@ -24,31 +24,30 @@ res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
 res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 
 res.gprlinRP <- mySimRP(type = "linear", gpr = TRUE)  # linear GPR with RP
-res.gprfbmRP <- mySimRP(type = "fbm", gpr = TRUE, nsim = 12)  # FBM GPR with RP
-res.ipfbmoptim <- mySim(type = "fbmoptim", nsim = 24)
+res.gprfbmRP <- mySimRP(type = "fbm", gpr = TRUE)  # FBM GPR with RP
 # res.iplinRP <- mySimRP(type = "linear")  # Canonical I-prior with RP
 # res.ipfbmRP <- mySimRP(type = "fbm")  # FBM I-prior with RP
 
 tab <- tabRes("RP5-GPR (linear)"        = res.gprlinRP,
               "RP5-GPR (FBM)"           = res.gprfbmRP,
               "GPR (linear)"            = res.gprlin,
-              "GPR (FBM-0.5)"               = res.gprfbm,
+              "GPR (FBM-0.5)"           = res.gprfbm,
               "GPR (FBM-MLE)"           = res.gprfbmoptim,
               "I-prior (linear)"        = res.iplin,
-              "I-prior (FBM-0.5)"           = res.ipfbm,
+              "I-prior (FBM-0.5)"       = res.ipfbm,
               "I-prior (FBM-MLE)"       = res.ipfbmoptim)
               # "RP5-I-prior (linear)"    = res.iplinRP,
               # "RP5-I-prior (FBM)"       = res.ipfbmRP)
 
 # Results from REC
-rp.lda5.mean <- c(13.05, 10.75, 9.78)
-rp.lda5.se   <- c(0.38, 0.25, 0.26)
+rp.lda5.mean <- c(14.63, 12.18, 10.15)
+rp.lda5.se   <- c(0.31, 0.23, 0.15)
 rp.lda5      <- meanAndSE(rp.lda5.mean, rp.lda5.se)
-rp.qda5.mean <- c(8.14, 6.15, 5.21)
-rp.qda5.se   <- c(0.37, 0.37, 0.20)
+rp.qda5.mean <- c(12.08, 9.92, 8.64)
+rp.qda5.se   <- c(0.27, 0.18, 0.13)
 rp.qda5      <- meanAndSE(rp.qda5.mean, rp.qda5.se)
-rp.knn5.mean <- c(13.05, 7.43, 5.43)
-rp.knn5.se   <- c(0.46, 0.25, 0.19)
+rp.knn5.mean <- c(11.81, 9.65, 8.04)
+rp.knn5.se   <- c(0.27, 0.21, 0.15)
 rp.knn5      <- meanAndSE(rp.knn5.mean, rp.knn5.se)
 rp.tab <- rbind("RP5-LDA" = rp.lda5, "RP5-QDA" = rp.qda5, "RP5-knn" = rp.knn5)
 colnames(rp.tab) <- colnames(tab$tab)
