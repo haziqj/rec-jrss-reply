@@ -112,7 +112,7 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
     fbmoptim <- TRUE
   }
 
-  this.exp <- paste0(experiment.name, ": ", type,
+  this.exp <- paste0(experiment.name, "- ", type,
                      ifelse(gpr, " GPR", " I-prior"))
   suppressWarnings(file.remove(paste0("save/", this.exp, ".csv")))
 
@@ -130,7 +130,7 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
                               fbmoptim = fbmoptim)
     }
     write.table(res.tmp, file = paste0("save/", this.exp, ".csv"),
-                append = TRUE, sep = ",", row.names = FALSE, col.names = FALSE)
+                append = TRUE, sep = ",", row.names = TRUE, col.names = TRUE)
     res.tmp
   }
   close(pb)
@@ -206,7 +206,7 @@ mySimRP <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
     fbmoptim <- TRUE
   }
 
-  this.exp <- paste0(experiment.name, ": ", type,
+  this.exp <- paste0(experiment.name, "- ", type,
                      ifelse(gpr, " RP-GPR", " RP-I-prior"))
   suppressWarnings(file.remove(paste0("save/", this.exp, ".csv")))
 
@@ -224,7 +224,7 @@ mySimRP <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
     }
 
     write.table(res.tmp, file = paste0("save/", this.exp, ".csv"),
-                append = TRUE, sep = ",", row.names = FALSE, col.names = FALSE)
+                append = TRUE, sep = ",", row.names = TRUE, col.names = TRUE)
     res.tmp
   }
   close(pb)
