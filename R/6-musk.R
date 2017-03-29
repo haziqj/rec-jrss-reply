@@ -15,7 +15,7 @@ N <- length(y)
 n <- c(100, 200, 500)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(type = "linear", gpr = TRUE)  # linear GPR
+res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 4)  # linear GPR
 res.gprfbm <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
 res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
 
@@ -23,31 +23,45 @@ res.iplin <- mySim(type = "linear")  # Canonical I-prior
 res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
 res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 
-tab <- tabRes("GPR (linear)"      = res.gprlin,
-              "GPR (FBM)"         = res.gprfbm,
-              "GPR (FBM MLE)"     = res.gprfbmoptim,
-              "I-prior (linear)"  = res.iplin,
-              "I-prior (FBM)"     = res.ipfbm,
-              "I-prior (FBM MLE)" = res.ipfbmoptim)
+res.iprobitlin <- ipmySim(nsim = 4)
+res.iprobitfbm <- ipmySim(nsim = 4, type = "fbm")
+
+res.gprlinRP <- mySimRP(type = "linear", gpr = TRUE)  # linear GPR with RP
+res.gprfbmRP <- mySimRP(type = "fbm", gpr = TRUE)  # FBM GPR with RP
+# res.iplinRP <- mySimRP(type = "linear")  # Canonical I-prior with RP
+# res.ipfbmRP <- mySimRP(type = "fbm")  # FBM I-prior with RP
+
+tab <- tabRes("RP5-GPR (linear)"        = res.gprlinRP,
+              "RP5-GPR (FBM)"           = res.gprfbmRP,
+              "GPR (linear)"            = res.gprlin,
+              "GPR (FBM)"               = res.gprfbm,
+              "GPR (FBM MLE)"           = res.gprfbmoptim,
+              "I-prior (linear)"        = res.iplin,
+              "I-prior (FBM)"           = res.ipfbm,
+              "I-prior (FBM MLE)"       = res.ipfbmoptim,
+              "I-prior probit (linear)" = res.iprobitlin,
+              "I-prior probit (FBM)"    = res.iprobitfbm)
+# "RP5-I-prior (linear)"    = res.iplinRP,
+# "RP5-I-prior (FBM)"       = res.ipfbmRP)
 
 # Results from REC
-rp.lda5.mean <- c(33.24, 30.19, 27.49)
-rp.lda5.se   <- c(0.42, 0.35, 0.30)
+rp.lda5.mean <- c(13.05, 10.75, 9.78)
+rp.lda5.se   <- c(0.38, 0.25, 0.26)
 rp.lda5      <- meanAndSE(rp.lda5.mean, rp.lda5.se)
-rp.qda5.mean <- c(30.47, 28.28, 26.31)
-rp.qda5.se   <- c(0.33, 0.26, 0.28)
+rp.qda5.mean <- c(8.14, 6.15, 5.21)
+rp.qda5.se   <- c(0.37, 0.37, 0.20)
 rp.qda5      <- meanAndSE(rp.qda5.mean, rp.qda5.se)
-rp.knn5.mean <- c(33.49, 30.18, 27.09)
-rp.knn5.se   <- c(0.40, 0.33, 0.31)
+rp.knn5.mean <- c(13.05, 7.43, 5.43)
+rp.knn5.se   <- c(0.46, 0.25, 0.19)
 rp.knn5      <- meanAndSE(rp.knn5.mean, rp.knn5.se)
-rp.tab <- rbind("RP-LDA5" = rp.lda5, "RP-QDA5" = rp.qda5, "RP-knn5" = rp.knn5)
+rp.tab <- rbind("RP5-LDA" = rp.lda5, "RP5-QDA" = rp.qda5, "RP5-knn" = rp.knn5)
 colnames(rp.tab) <- colnames(tab$tab)
 
 # Calculate ranks
-tab.mean <- rbind(tab$tab.mean, "RP-LDA5" = rp.lda5.mean,
-                  "RP-QDA5" = rp.qda5.mean, "RP-knn5" = rp.knn5.mean)
-tab.se <- rbind(tab$tab.se, "RP-LDA5" = rp.lda5.se,
-                "RP-QDA5" = rp.qda5.se, "RP-knn5" = rp.knn5.se)
+tab.mean <- rbind(tab$tab.mean, "RP5-LDA" = rp.lda5.mean,
+                  "RP5-QDA" = rp.qda5.mean, "RP5-knn" = rp.knn5.mean)
+tab.se <- rbind(tab$tab.se, "RP5-LDA" = rp.lda5.se,
+                "RP5-QDA" = rp.qda5.se, "RP5-knn" = rp.knn5.se)
 tab.ranks <- tabRank(tab.mean, tab.se)
 
 # Tabulate results

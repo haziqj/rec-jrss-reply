@@ -34,13 +34,14 @@ res.iplin <- mySim(type = "linear")  # Canonical I-prior
 res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
 res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 
-res.iprobitlin <- ipmySim(nsim = 4)
-res.iprobitfbm <- ipmySim(nsim = 4, type = "fbm")
+res.iprobitlin <- ipmySim()
+res.iprobitfbm <- ipmySim(type = "fbm")
 
 res.gprlinRP <- mySimRP(type = "linear", gpr = TRUE)  # linear GPR with RP
 res.gprfbmRP <- mySimRP(type = "fbm", gpr = TRUE)  # FBM GPR with RP
 # res.iplinRP <- mySimRP(type = "linear")  # Canonical I-prior with RP
 # res.ipfbmRP <- mySimRP(type = "fbm")  # FBM I-prior with RP
+
 
 tab <- tabRes("RP5-GPR (linear)"        = res.gprlinRP,
               "RP5-GPR (FBM)"           = res.gprfbmRP,
@@ -81,5 +82,3 @@ knitr::kable(tab.all, align = "r")
 
 # Plot
 plotRes()
-
-

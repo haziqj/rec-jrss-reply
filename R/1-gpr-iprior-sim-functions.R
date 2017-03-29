@@ -4,10 +4,9 @@ library(RPEnsemble)
 library(ggplot2)
 library(foreach)
 library(doSNOW)
-source("R/ipriorProbit.R")
-no.cores <- detectCores() / 2
+no.cores <- detectCores() / 2  # or set number of cores
 
-# For push notifications
+# For push notifications using pushoverR
 userID <- "uyq2g37vnityt1b3yvpyicv6o9h456"
 appToken <- "avxnrig1qppsgsw9woghwwmxsobo4a"
 
@@ -113,6 +112,9 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
     fbmoptim <- TRUE
   }
 
+  this.exp <- paste0(experiment.name, ": ", type,
+                     ifelse(gpr, " GPR", " I-prior"))
+
   cl <- makeCluster(no.cores)
   registerDoSNOW(cl)
   res <- foreach(i = 1:nsim, .combine = rbind,
@@ -126,16 +128,16 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
                               ipriorfunction = ipriorfn, gpr = gpr,
                               fbmoptim = fbmoptim)
     }
+    write.table(res.tmp, file = paste0("save/", this.exp, ".csv"),
+                append = TRUE, sep = ",", row.names = FALSE, col.names = FALSE)
     res.tmp
   }
   close(pb)
   stopCluster(cl)
   save.image(experiment.name)
 
-  push.message <- paste0(
-    experiment.name, ": ", type, ifelse(gpr, " GPR", " I-prior"), " COMPLETED."
-  )
-  pushoverr::pushover(message = push.message, user = userID, app = appToken)
+  pushoverr::pushover(message = paste0(this.exp, " COMPLETED."),
+                      user = userID, app = appToken)
 
   colnames(res) <- paste0(c("n = "), n.mySim)
   res
@@ -202,6 +204,10 @@ mySimRP <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
     fbmoptim <- TRUE
   }
 
+  this.exp <- paste0(experiment.name, ": ", type,
+                     ifelse(gpr, " RP-GPR", " RP-I-prior"))
+  file.remove(paste0("save/", this.exp, ".csv"))
+
   cl <- makeCluster(no.cores)
   registerDoSNOW(cl)
   res <- foreach(i = 1:nsim, .combine = rbind,
@@ -214,16 +220,17 @@ mySimRP <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
                                 ipriorfunction = ipriorfn, gpr = gpr, B1.innerSim = B1,
                                 B2.innerSim = B2, fbmoptim = fbmoptim)
     }
+
+    write.table(res.tmp, file = paste0("save/", this.exp, ".csv"),
+                append = TRUE, sep = ",", row.names = FALSE, col.names = FALSE)
     res.tmp
   }
   close(pb)
   stopCluster(cl)
   save.image(experiment.name)
 
-  push.message <- paste0(
-    experiment.name, ": ", type, ifelse(gpr, " RP-GPR", " RP-I-prior"), " COMPLETED."
-  )
-  pushoverr::pushover(message = push.message, user = userID, app = appToken)
+  pushoverr::pushover(message = paste0(this.exp, " COMPLETED."),
+                      user = userID, app = appToken)
 
   colnames(res) <- paste0(c("n = "), n.mySim)
   res
@@ -263,47 +270,3 @@ plotRes <- function() {
     facet_grid(. ~ variable) +
     labs(x = "Misclassification rate", y = NULL) + guides(col = FALSE)
 }
-
-# I-prior probit innersim
-probitInnerSim <- function(y.innerSim, X.innerSim, n.innerSim, kernel) {
-  dat <- testTrain(n.innerSim, y.innerSim, X.innerSim)
-  mod <- iprobit(dat$y.train, dat$X.train, kernel = kernel, niter = 100)
-  y.test <- predict(mod, newdata = dat$X.test)$y
-  sum(y.test != dat$y.test) / (dat$N - n.innerSim) * 100
-}
-
-# I-prior probit simulation
-ipmySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
-                    type = c("linear", "fbm")) {
-  type <- match.arg(type, c("linear", "fbm"))
-  kernel <- ifelse(type == "fbm", "FBM", "Canonical")
-  pb <- txtProgressBar(min = 0, max = nsim, style = 3)
-  progress <- function(i) setTxtProgressBar(pb, i)
-
-  cl <- makeCluster(no.cores)
-  registerDoSNOW(cl)
-  res <- foreach(i = 1:nsim, .combine = rbind,
-                 .packages = c("iprior"),
-                 .export = c("testTrain", "probitInnerSim", "iprobit",
-                             "predict.ipriorProbit"),
-                 .options.snow = list(progress = progress)) %dopar% {
-    res.tmp <- rep(NA, length(n.mySim))
-    for (j in 1:length(n.mySim)) {
-      res.tmp[j]  <- probitInnerSim(y.mySim, X.mySim, n.mySim[j], kernel = kernel)
-      }
-      res.tmp
-  }
-  close(pb)
-  stopCluster(cl)
-  save.image(experiment.name)
-
-  push.message <- paste0(
-    experiment.name, ": ", type, "I-prior probit COMPLETED."
-  )
-  pushoverr::pushover(message = push.message, user = userID, app = appToken)
-
-  colnames(res) <- paste0(c("n = "), n.mySim)
-  res
-}
-
-

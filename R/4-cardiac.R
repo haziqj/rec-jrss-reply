@@ -40,18 +40,18 @@ res.gprfbmRP <- mySimRP(type = "fbm", gpr = TRUE)  # FBM GPR with RP
 # res.iplinRP <- mySimRP(type = "linear")  # Canonical I-prior with RP
 # res.ipfbmRP <- mySimRP(type = "fbm")  # FBM I-prior with RP
 
-tab <- tabRes("GPR (linear)"            = res.gprlin,
+tab <- tabRes("RP5-GPR (linear)"        = res.gprlinRP,
+              # "RP5-GPR (FBM)"           = res.gprfbmRP,
+              "GPR (linear)"            = res.gprlin,
               "GPR (FBM)"               = res.gprfbm,
               "GPR (FBM MLE)"           = res.gprfbmoptim,
               "I-prior (linear)"        = res.iplin,
               "I-prior (FBM)"           = res.ipfbm,
               "I-prior (FBM MLE)"       = res.ipfbmoptim,
               "I-prior probit (linear)" = res.iprobitlin,
-              "I-prior probit (FBM)"    = res.iprobitfbm,
-              "RP5-GPR (linear)"        = res.gprlinRP,
-              "RP5-GPR (FBM)"           = res.gprfbmRP)
-              # "RP5-I-prior (linear)"    = res.iplinRP,
-              # "RP5-I-prior (FBM)"       = res.ipfbmRP)
+              "I-prior probit (FBM)"    = res.iprobitfbm)
+# "RP5-I-prior (linear)"    = res.iplinRP,
+# "RP5-I-prior (FBM)"       = res.ipfbmRP)
 
 # Results from REC
 rp.lda5.mean <- c(33.24, 30.19, 27.49)
