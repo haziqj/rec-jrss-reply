@@ -148,7 +148,8 @@ innerSimRP <- function(y.innerSim, X.innerSim, n.innerSim, kernel,
                        ipriorfunction, gpr, fbmoptim = FALSE, B1.innerSim, B2.innerSim) {
   dat <- testTrain(n.innerSim, y.innerSim, X.innerSim)
   small.d <- 5
-  A <- RPGenerate(p = ncol(X.innerSim), d = small.d, B2 = B2.innerSim)
+  A <- RPGenerate(p = ncol(X.innerSim), d = small.d, B2 = B2.innerSim,
+                  method = "Gaussian")
   XRP <- lapply(1:B2.innerSim,
                 function(x, X = dat$X.train) X %*% A[, small.d * (x - 1) + 1:small.d])
   XRP.error <- rep(NA, B2.innerSim)

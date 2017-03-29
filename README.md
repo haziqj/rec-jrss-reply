@@ -3,10 +3,11 @@
 In reference to [1], we compare the peformance of binary classification using Gaussian process regression (GPR) against the method of random projection ensemble classification. GPR estimation algorithms are O(n^3), so it is possible to use the full dimension of the covariates as we are training the models on subsamples of size `n < 1000`. GPR models were fit using the `iprior` package (see [3]). We also sought to determine whether or not random projection ensembles would improve on GPR. The package in [2] provided the random projection matrices.
 
 Somes notes on the running of the experiments:
-1. For RP-GPR, the data was projected to a smaller dimension of `d=5`. We were unable to use the default values for `B1` and `B2` as suggested in [1] due to time constraints. We resorted to using `B1 = 30` and `B2 = 5`.
-2. For each subsample, the methods are ranked according to the classification error rates (plus the standard error), with the smallest values ranked highest. The `Rank` column in the table represents the "average" rank over the subsamples.
-3. Functions to run the 100 repeated experiments for each data set were parallelised over the available number of cores. R can detect the number of cores available through `detectCores()`, but this usually includes hyper-threads. Set the desired number of cores in the R file.
-4. Experiments were conducted on the following machine:
+1. For each data set, a training set of size `n` was formed by subsampling the `N` observations. A GPR model was fitted on this training set, and the test classification rate (out of 100) was calculated on the remaining data (or where applicable, a subsample of size 1000). Each experiment was repeated 100 times.
+2. For RP-GPR, the data was projected to a smaller dimension of `d=5`. We were unable to use the default values for `B1` and `B2` as suggested in [1] due to time constraints. We resorted to using `B1 = 30` and `B2 = 5`.
+3. For each subsample, the methods are ranked according to the classification error rates (plus the standard error), with the smallest values ranked highest. The `Rank` column in the table represents the "average" rank over the subsamples.
+4. Functions to run the 100 repeated experiments for each data set were parallelised over the available number of cores. R can detect the number of cores available through `detectCores()`, but this usually includes hyper-threads. Set the desired number of cores in the R file.
+5. Experiments were conducted on the following machine:
 
 ```r
 > sessionInfo()
