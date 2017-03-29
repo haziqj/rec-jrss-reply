@@ -5,7 +5,7 @@ experiment.name <- "Eye state detection data"
 # EEG Eye State Data Set (https://archive.ics.uci.edu/ml/datasets/EEG+Eye+State)
 # consists of p=14 electroencephalogram measurements on 14 980 observations. The
 # task is to use the electroencephalogram reading to determine the state of the
-# eye. There are 8256 observations for which the eye is open (class 0), and 6723
+# eye. There are 8257 observations for which the eye is open (class 0), and 6723
 # for which the eye is closed (class 1). Binary classification task: "eye open
 # (0)" or "eye closed (1)" p = 14 (accelerometer measurements), N = 14980
 eye <- read.table("data/EEG Eye State.arff.txt", sep = ",", skip = 19)
@@ -16,13 +16,13 @@ N <- length(y)
 n <- c(50, 200, 1000)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 16)  # linear GPR
-res.gprfbm <- mySim(type = "fbm", gpr = TRUE, nsim = 16)  # FBM GPR
-res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, nsim = 16)  # FBM optim GPR
+res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 8)  # linear GPR
+res.gprfbm <- mySim(type = "fbm", gpr = TRUE, nsim = 8)  # FBM GPR
+res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, nsim = 8)  # FBM optim GPR
 
-res.iplin <- mySim(type = "linear", nsim = 16)  # Canonical I-prior
-res.ipfbm <- mySim(type = "fbm", nsim = 16)  # FBM I-prior
-res.ipfbmoptim <- mySim(type = "fbmoptim", nsim = 16)  # FBM optim I-prior
+res.iplin <- mySim(type = "linear", nsim = 8)  # Canonical I-prior
+res.ipfbm <- mySim(type = "fbm", nsim = 8)  # FBM I-prior
+res.ipfbmoptim <- mySim(type = "fbmoptim", nsim = 8)  # FBM optim I-prior
 
 tab <- tabRes("GPR (linear)"      = res.gprlin,
               "GPR (FBM-0.5)"     = res.gprfbm,

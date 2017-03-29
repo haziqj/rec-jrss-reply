@@ -59,7 +59,7 @@ tabRes <- function(...) {
 
   for (k in 1:K) {
     tab.mean.tmp <- apply(this[[k]], 2, mean)
-    tab.se.tmp <- apply(this[[k]], 2, sd) / 10
+    tab.se.tmp <- apply(this[[k]], 2, sd) / sqrt(nrow(this[[k]]))
     tab.mean.and.se <- meanAndSE(tab.mean.tmp, tab.se.tmp)
     tab.mean <- rbind(tab.mean, tab.mean.tmp)
     tab.se <- rbind(tab.se, tab.se.tmp)
