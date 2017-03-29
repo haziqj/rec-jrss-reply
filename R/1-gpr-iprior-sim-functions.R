@@ -87,7 +87,7 @@ innerSim <- function(y.innerSim, X.innerSim, n.innerSim, kernel,
     mod <- ipriorfunction(mod, control = list(silent = TRUE))
   }
   y.test <- classLin(predict(mod, newdata = list(dat$X.test)))
-  sum(y.test != dat$y.test) / (dat$N - n.innerSim) * 100
+  mean(y.test != dat$y.test) * 100
 }
 
 
