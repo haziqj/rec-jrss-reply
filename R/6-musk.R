@@ -15,8 +15,8 @@ N <- length(y)
 n <- c(100, 200, 500)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 4)  # linear GPR
-res.gprfbm <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
+res.gprlin1 <- mySim(type = "linear", gpr = TRUE, nsim = 76)  # linear GPR
+res.gprfbm1 <- mySim(type = "fbm", gpr = TRUE, nsim = 76)  # FBM GPR
 res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
 
 res.iplin <- mySim(type = "linear")  # Canonical I-prior
