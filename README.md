@@ -106,7 +106,21 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ## Handwritten digits (N = 1,500, p = 5000)
 
-*TBC*
+*Results are preliminary*
+
+|                  |       n = 50|      n = 200|     n = 1000| Rank|
+|:-----------------|------------:|------------:|------------:|----:|
+|GPR (linear)      | 37.57 (3.96)| 18.61 (4.68)| 12.95 (5.11)|    7|
+|GPR (FBM)         | 20.73 (2.05)| 11.95 (3.64)|  4.85 (0.29)|    4|
+|GPR (FBM MLE)     | 14.62 (0.67)|  7.70 (0.54)|  5.25 (0.35)|    1|
+|I-prior (linear)  | 49.89 (0.30)| 47.46 (2.56)|  9.38 (1.12)|    8|
+|I-prior (FBM)     | 36.67 (4.62)| 26.53 (5.13)| 13.67 (1.00)|    6|
+|I-prior (FBM MLE) |           NA|           NA|           NA|    9|
+|RP-LDA5           | 15.75 (0.41)| 10.58 (0.17)|  9.39 (0.15)|    3|
+|RP-QDA5           | 15.53 (0.40)| 10.53 (0.19)|  9.37 (0.16)|    2|
+|RP-knn5           | 15.95 (0.46)| 11.09 (0.17)|  9.57 (0.16)|    5|
+
+![](figure/gisette.png)
 
 ## Experiment notes
 
