@@ -169,7 +169,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 [1] Cannings, T. I. and Samworth, R. J. (2017). Random projection ensemble classification. *J. Roy. Statist. Soc., Ser. B (with discussion)*, to appear.
 
-[2] Cannings, T. I. and Samworth, R. J. (2016). RPEnsemble: Random projection ensemble classification. R package, version 0.3. https://cran.r-project.org/web/packages/RPEnsemble/index.html
+[2] Cannings, T. I. and Samworth, R. J. (2016). RPEnsemble: Random projection ensemble classification. R package, version 0.3. [https://cran.r-project.org/web/packages/RPEnsemble/index.html](https://cran.r-project.org/web/packages/RPEnsemble/index.html)
 
 [3] Jamil, H. (2017). iprior: Linear Regression using I-Priors. R package version
-0.6.4.9002. https://github.com/haziqjamil/iprior.
+0.6.4.9003. [https://github.com/haziqjamil/iprior](https://cran.r-project.org/web/packages/RPEnsemble/index.html)
