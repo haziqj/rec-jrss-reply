@@ -39,7 +39,6 @@ res.gprfbmRP <- mySimRP(type = "fbm", gpr = TRUE)  # FBM GPR with RP
 # res.iplinRP <- mySimRP(type = "linear")  # Canonical I-prior with RP
 # res.ipfbmRP <- mySimRP(type = "fbm")  # FBM I-prior with RP
 
-
 tab <- tabRes("RP5-GPR (linear)"  = res.gprlinRP,
               "RP5-GPR (FBM-0.5)" = res.gprfbmRP,
               "GPR (linear)"      = res.gprlin,
