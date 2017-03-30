@@ -4,7 +4,19 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ## Eye state detection (N = 14,980, p = 14)
 
+|                  |       n = 50|      n = 200|     n = 1000| Rank|
+|:-----------------|------------:|------------:|------------:|----:|
+|GPR (linear)      | 44.88 (0.68)| 42.67 (1.35)| 37.85 (0.64)|    5|
+|GPR (FBM-0.5)     | 43.14 (1.30)| 26.24 (0.64)| 10.69 (0.29)|    1|
+|GPR (FBM-MLE)     |           NA|           NA|           NA|    6|
+|I-prior (linear)  |           NA|           NA|           NA|    7|
+|I-prior (FBM-0.5) |           NA|           NA|           NA|    8|
+|I-prior (FBM-MLE) |           NA|           NA|           NA|    9|
+|RP-LDA5           | 42.06 (0.38)| 38.61 (0.29)| 36.30 (0.21)|    4|
+|RP-QDA5           | 38.97 (0.39)| 32.44 (0.42)| 30.91 (0.87)|    3|
+|RP-knn5           | 39.37 (0.39)| 26.91 (0.27)| 13.54 (0.19)|    1|
 
+![](figure/eye.png)
 
 ## Ionosphere data set (N = 350, p = 34)
 
