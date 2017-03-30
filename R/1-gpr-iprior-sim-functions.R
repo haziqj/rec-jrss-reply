@@ -58,12 +58,18 @@ tabRes <- function(...) {
   tab.mean <- tab.se <- tab <- NULL
 
   for (k in 1:K) {
-    tab.mean.tmp <- apply(this[[k]], 2, mean)
-    tab.se.tmp <- apply(this[[k]], 2, sd) / sqrt(nrow(this[[k]]))
-    tab.mean.and.se <- meanAndSE(tab.mean.tmp, tab.se.tmp)
-    tab.mean <- rbind(tab.mean, tab.mean.tmp)
-    tab.se <- rbind(tab.se, tab.se.tmp)
-    tab <- rbind(tab, tab.mean.and.se)
+    if (any(is.na(this[[k]]))) {
+      tab.mean <- rbind(tab.mean, NA)
+      tab.se <- rbind(tab.se, NA)
+      tab <- rbind(tab, NA)
+    } else {
+      tab.mean.tmp <- apply(this[[k]], 2, mean)
+      tab.se.tmp <- apply(this[[k]], 2, sd) / sqrt(nrow(this[[k]]))
+      tab.mean.and.se <- meanAndSE(tab.mean.tmp, tab.se.tmp)
+      tab.mean <- rbind(tab.mean, tab.mean.tmp)
+      tab.se <- rbind(tab.se, tab.se.tmp)
+      tab <- rbind(tab, tab.mean.and.se)
+    }
   }
 
   rownames(tab.mean) <- rownames(tab.se) <- rownames(tab) <- names(this)
