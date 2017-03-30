@@ -272,7 +272,6 @@ plotRes <- function() {
   )
   plot.df <- cbind(plot.df, se = plot.se[, 2], id2 = id2)
   plot.df$id <- factor(plot.df$id, levels = rev(rownames(tab.all)))
-  # plot.df
   ggplot(plot.df, aes(x = value, y = id, col = id2)) +
     geom_point() +
     geom_errorbarh(aes(xmin = value - 1.96 * se, xmax = value + 1.96 * se,
