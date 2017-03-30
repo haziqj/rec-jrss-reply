@@ -4,10 +4,12 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ## Eye state detection (N = 14,980, p = 14)
 
+*Notes: Experiment is ongoing*
+
 |                  |       n = 50|      n = 200|     n = 1000| Rank|
 |:-----------------|------------:|------------:|------------:|----:|
-|GPR (linear)      | 44.88 (0.68)| 42.67 (1.35)| 37.85 (0.64)|    5|
-|GPR (FBM-0.5)     | 43.14 (1.30)| 26.24 (0.64)| 10.69 (0.29)|    1|
+|GPR (linear)      | 46.61 (0.92)| 42.27 (0.95)| 37.53 (0.48)|    5|
+|GPR (FBM-0.5)     | 42.48 (1.09)| 26.00 (0.54)| 10.79 (0.21)|    1|
 |GPR (FBM-MLE)     |           NA|           NA|           NA|    6|
 |I-prior (linear)  |           NA|           NA|           NA|    7|
 |I-prior (FBM-0.5) |           NA|           NA|           NA|    8|
@@ -40,7 +42,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ## Down’s syndrome diagnoses in mice (N = 528, p = 77)
 
-*Notes: missing data removed.*
+*Notes: Missing data removed.*
 
 |                        |      n = 100|      n = 200|      n = 500| Rank|
 |:-----------------------|------------:|------------:|------------:|----:|
@@ -118,7 +120,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ## Handwritten digits (N = 1,500, p = 5000)
 
-*Results are preliminary*
+*Notes: Results are preliminary*
 
 |                  |       n = 50|      n = 200|     n = 1000| Rank|
 |:-----------------|------------:|------------:|------------:|----:|
