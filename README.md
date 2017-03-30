@@ -50,9 +50,9 @@ In reference to [1], we compare the peformance of binary classification using Ga
 |I-prior (linear)  | 17.81 (1.11)|  4.53 (0.18)|  1.96 (0.18)|    6|
 |I-prior (FBM-0.5) |  9.11 (0.62)|  3.15 (0.16)|  0.23 (0.07)|    3|
 |I-prior (FBM-MLE) |  9.92 (0.62)|  2.35 (0.14)|  0.31 (0.10)|    3|
-|RP-LDA5           |    NA (  NA)| 25.17 (0.30)| 23.56 (0.26)|    9|
-|RP-QDA5           |    NA (  NA)| 18.24 (0.29)| 16.05 (0.24)|    8|
-|RP-knn5           |    NA (  NA)| 11.24 (0.29)|  2.24 (0.10)|    7|
+|RP5-LDA           |    NA (  NA)| 25.17 (0.30)| 23.56 (0.26)|    9|
+|RP5-QDA           |    NA (  NA)| 18.24 (0.29)| 16.05 (0.24)|    8|
+|RP5-knn           |    NA (  NA)| 11.24 (0.29)|  2.24 (0.10)|    7|
 
 ![](figure/mice.png)
 

@@ -52,14 +52,14 @@ rp.qda5      <- meanAndSE(rp.qda5.mean, rp.qda5.se)
 rp.knn5.mean <- c(NA, 11.24, 2.24)
 rp.knn5.se   <- c(NA, 0.29, 0.10)
 rp.knn5      <- meanAndSE(rp.knn5.mean, rp.knn5.se)
-rp.tab <- rbind("RP-LDA5" = rp.lda5, "RP-QDA5" = rp.qda5, "RP-knn5" = rp.knn5)
+rp.tab <- rbind("RP5-LDA" = rp.lda5, "RP5-QDA" = rp.qda5, "RP5-knn" = rp.knn5)
 colnames(rp.tab) <- colnames(tab$tab)
 
 # Calculate ranks
-tab.mean <- rbind(tab$tab.mean, "RP-LDA5" = rp.lda5.mean,
-                  "RP-QDA5" = rp.qda5.mean, "RP-knn5" = rp.knn5.mean)
-tab.se <- rbind(tab$tab.se, "RP-LDA5" = rp.lda5.se,
-                "RP-QDA5" = rp.qda5.se, "RP-knn5" = rp.knn5.se)
+tab.mean <- rbind(tab$tab.mean, "RP5-LDA" = rp.lda5.mean,
+                  "RP5-QDA" = rp.qda5.mean, "RP5-knn" = rp.knn5.mean)
+tab.se <- rbind(tab$tab.se, "RP5-LDA" = rp.lda5.se,
+                "RP5-QDA" = rp.qda5.se, "RP5-knn" = rp.knn5.se)
 tab.ranks <- tabRank(tab.mean, tab.se)
 
 # Tabulate results
