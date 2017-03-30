@@ -20,30 +20,30 @@ N <- length(y)
 n <- c(50, 200, 1000)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(type = "linear", gpr = TRUE)  # linear GPR
-res.gprfbm <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
-res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
+res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 12)  # linear GPR
+res.gprfbm <- mySim(type = "fbm", gpr = TRUE, nsim = 12)  # FBM GPR
+res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, nsim = 8)  # FBM optim GPR
 
-res.iplin <- mySim(type = "linear")  # Canonical I-prior
-res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
-res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
+res.iplin <- mySim(type = "linear", nsim = 12)  # Canonical I-prior
+res.ipfbm <- mySim(type = "fbm", nsim = 12)  # FBM I-prior
+res.ipfbmoptim <- mySim(type = "fbmoptim", nsim = 8)  # FBM optim I-prior
 
 tab <- tabRes("GPR (linear)"      = res.gprlin,
               "GPR (FBM)"         = res.gprfbm,
               "GPR (FBM MLE)"     = res.gprfbmoptim,
               "I-prior (linear)"  = res.iplin,
               "I-prior (FBM)"     = res.ipfbm,
-              "I-prior (FBM MLE)" = res.ipfbmoptim)
+              "I-prior (FBM MLE)" = NA)
 
 # Results from REC
-rp.lda5.mean <- c(36.84, 36.45, 32.57)
-rp.lda5.se   <- c(0.84, 0.85, 1.06)
+rp.lda5.mean <- c(15.75, 10.58, 9.39)
+rp.lda5.se   <- c(0.41, 0.17, 0.15)
 rp.lda5      <- meanAndSE(rp.lda5.mean, rp.lda5.se)
-rp.qda5.mean <- c(44.43, 43.56, 41.10)
-rp.qda5.se   <- c(0.34, 0.31, 0.33)
+rp.qda5.mean <- c(15.53, 10.53, 9.37)
+rp.qda5.se   <- c(0.40, 0.19, 0.16)
 rp.qda5      <- meanAndSE(rp.qda5.mean, rp.qda5.se)
-rp.knn5.mean <- c(49.08, 47.27, 36.39)
-rp.knn5.se   <- c(0.24, 0.26, 0.29)
+rp.knn5.mean <- c(15.95, 11.09, 9.57)
+rp.knn5.se   <- c(0.46, 0.17, 0.16)
 rp.knn5      <- meanAndSE(rp.knn5.mean, rp.knn5.se)
 rp.tab <- rbind("RP-LDA5" = rp.lda5, "RP-QDA5" = rp.qda5, "RP-knn5" = rp.knn5)
 colnames(rp.tab) <- colnames(tab$tab)

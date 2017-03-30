@@ -143,8 +143,10 @@ mySim <- function(y.mySim = y, X.mySim = X.orig, nsim = 100, n.mySim = n,
   stopCluster(cl)
   save.image(experiment.name)
 
-  pushoverr::pushover(message = paste0(this.exp, " COMPLETED."),
-                      user = userID, app = appToken)
+  if (!(is.null(userID) && is.null(appToken))) {
+    pushoverr::pushover(message = paste0(this.exp, " COMPLETED."),
+                        user = userID, app = appToken)
+  }
 
   colnames(res) <- paste0(c("n = "), n.mySim)
   res
