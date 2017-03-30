@@ -4,7 +4,7 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ## Eye state detection (N = 14,980, p = 14)
 
-*TBC*
+
 
 ## Ionosphere data set (N = 350, p = 34)
 
