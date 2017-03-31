@@ -1,10 +1,11 @@
 # Require iprior v0.6.4.9002 or higher for GPR support
 library(iprior)
+library(pushoverr)
 library(RPEnsemble)
 library(ggplot2)
 library(foreach)
 library(doSNOW)
-no.cores <- detectCores() / 2  # or set number of cores
+no.cores <- detectCores()   # or set number of cores
 
 # For push notifications using pushoverR
 userID <- "uyq2g37vnityt1b3yvpyicv6o9h456"
