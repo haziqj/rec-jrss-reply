@@ -134,35 +134,43 @@ In reference to [1], we compare the peformance of binary classification using Ga
 2. For RP-GPR, the data was projected to a smaller dimension of `d=5`. We were unable to use the default values for `B1` and `B2` as suggested in [1] due to time constraints. We resorted to using `B1 = 30` and `B2 = 5`.
 3. For each subsample, the methods are ranked according to the classification error rates (plus the standard error), with the smallest values ranked highest. The `Rank` column in the table represents the "average" rank over the subsamples.
 4. Functions to run the 100 repeated experiments for each data set were parallelised over the available number of cores. R can detect the number of cores available through `detectCores()`, but this usually includes hyper-threads. Set the desired number of cores in the R file.
-5. Experiments were conducted on the following machine:
+5. Experiments were conducted on Amazon Elastic Compute Cloud (EC2).
 
 ```r
+> parallel::detectCores()
+## [1] 64
 > sessionInfo()
-## R version 3.3.2 (2016-10-31)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: macOS Sierra 10.12.3
+## R version 3.3.1 (2016-06-21)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 16.04.1 LTS
 ## 
 ## locale:
-## [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] parallel  stats     graphics  grDevices utils     datasets  methods   base
+## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
 ## 
 ## other attached packages:
-##  [1] gridExtra_2.2.1          doSNOW_1.0.14            snow_0.4-2
-##  [4] iterators_1.0.8          foreach_1.4.3            ggplot2_2.2.1
-##  [7] RPEnsemble_0.3           MASS_7.3-45              distr_2.6
-## [10] SweaveListingUtils_0.7.5 sfsmisc_1.1-0            startupmsg_0.9.3
-## [13] iprior_0.6.4.9002
+##  [1] doSNOW_1.0.14            snow_0.4-2               iterators_1.0.8         
+##  [4] foreach_1.4.3            ggplot2_2.2.1            RPEnsemble_0.3          
+##  [7] MASS_7.3-45              distr_2.6                SweaveListingUtils_0.7.5
+## [10] sfsmisc_1.1-0            startupmsg_0.9.3         pushoverr_1.0.0         
+## [13] iprior_0.6.4.9003       
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.9        knitr_1.15.1       magrittr_1.5       munsell_0.4.3
-##  [5] colorspace_1.3-2   R6_2.2.0           httr_1.2.1         stringr_1.2.0
-##  [9] plyr_1.8.4         tools_3.3.2        grid_3.3.2         gtable_0.2.0
-## [13] class_7.3-14       lazyeval_0.2.0     assertthat_0.1     tibble_1.2
-## [17] RColorBrewer_1.1-2 reshape2_1.4.2     codetools_0.2-15   curl_2.3
-## [21] stringi_1.1.2      compiler_3.3.2     pushoverr_1.0.0    scales_0.4.1
-## [25] jsonlite_1.3
+##  [1] Rcpp_0.12.10       magrittr_1.5       knitr_1.14         munsell_0.4.3     
+##  [5] colorspace_1.2-6   R6_2.1.3           stringr_1.1.0      highr_0.6         
+##  [9] httr_1.2.1         plyr_1.8.4         tools_3.3.1        grid_3.3.1        
+## [13] gtable_0.2.0       class_7.3-14       lazyeval_0.2.0     assertthat_0.1    
+## [17] tibble_1.2         reshape2_1.4.1     RColorBrewer_1.1-2 codetools_0.2-14  
+## [21] curl_1.2           labeling_0.3       stringi_1.1.1      compiler_3.3.1    
+## [25] scales_0.4.1       jsonlite_1.0      
 ```
 
 [1] Cannings, T. I. and Samworth, R. J. (2017). Random projection ensemble classification. *J. Roy. Statist. Soc., Ser. B (with discussion)*, to appear.
