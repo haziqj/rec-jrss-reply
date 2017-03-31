@@ -16,19 +16,19 @@ N <- length(y)
 n <- c(50, 200, 1000)  # subsamples
 
 # Simulations
-res.gprlin3 <- mySim(type = "linear", gpr = TRUE)  # linear GPR
-res.gprfbm3 <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
-res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
+res.gprlin2 <- mySim(type = "linear", gpr = TRUE)  # linear GPR
+res.gprfbm2 <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
+# res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
 
 res.iplin <- mySim(type = "linear")  # Canonical I-prior
 res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
-res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
+# res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 
 tab <- tabRes("GPR (linear)"      = res.gprlin,
               "GPR (FBM-0.5)"     = res.gprfbm,
               "GPR (FBM-MLE)"     = NA, #res.gprfbmoptim
-              "I-prior (linear)"  = NA, #res.iplin,
-              "I-prior (FBM-0.5)" = NA, #res.ipfbm,
+              "I-prior (linear)"  = res.iplin,
+              "I-prior (FBM-0.5)" = res.ipfbm,
               "I-prior (FBM-MLE)" = NA) #res.ipfbmoptim)
 
 # Results from REC
@@ -41,14 +41,14 @@ rp.qda5      <- meanAndSE(rp.qda5.mean, rp.qda5.se)
 rp.knn5.mean <- c(39.37, 26.91, 13.54)
 rp.knn5.se   <- c(0.39, 0.27, 0.19)
 rp.knn5      <- meanAndSE(rp.knn5.mean, rp.knn5.se)
-rp.tab <- rbind("RP-LDA5" = rp.lda5, "RP-QDA5" = rp.qda5, "RP-knn5" = rp.knn5)
+rp.tab <- rbind("RP5-LDA" = rp.lda5, "RP5-QDA" = rp.qda5, "RP5-knn" = rp.knn5)
 colnames(rp.tab) <- colnames(tab$tab)
 
 # Calculate ranks
-tab.mean <- rbind(tab$tab.mean, "RP-LDA5" = rp.lda5.mean,
-                  "RP-QDA5" = rp.qda5.mean, "RP-knn5" = rp.knn5.mean)
+tab.mean <- rbind(tab$tab.mean, "RP5-LDA" = rp.lda5.mean,
+                  "RP5-QDA" = rp.qda5.mean, "RP5-knn" = rp.knn5.mean)
 tab.se <- rbind(tab$tab.se, "RP-LDA5" = rp.lda5.se,
-                "RP-QDA5" = rp.qda5.se, "RP-knn5" = rp.knn5.se)
+                "RP5-QDA" = rp.qda5.se, "RP5-knn" = rp.knn5.se)
 tab.ranks <- tabRank(tab.mean, tab.se)
 
 # Tabulate results
