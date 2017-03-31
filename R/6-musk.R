@@ -15,8 +15,8 @@ N <- length(y)
 n <- c(100, 200, 500)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(type = "linear", gpr = TRUE)  # linear GPR
-res.gprfbm <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
+res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 76)  # linear GPR
+res.gprfbm <- mySim(type = "fbm", gpr = TRUE, nsim = 76)  # FBM GPR
 res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
 
 res.iplin <- mySim(type = "linear")  # Canonical I-prior
@@ -28,8 +28,8 @@ res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 # res.iplinRP <- mySimRP(type = "linear")  # Canonical I-prior with RP
 # res.ipfbmRP <- mySimRP(type = "fbm")  # FBM I-prior with RP
 
-tab <- tabRes(#"RP5-GPR (linear)"        = res.gprlinRP,
-              #"RP5-GPR (FBM)"           = res.gprfbmRP,
+tab <- tabRes("RP5-GPR (linear)"        = res.gprlinRP,
+              "RP5-GPR (FBM)"           = res.gprfbmRP,
               "GPR (linear)"            = res.gprlin,
               "GPR (FBM-0.5)"           = res.gprfbm,
               "GPR (FBM-MLE)"           = res.gprfbmoptim,
