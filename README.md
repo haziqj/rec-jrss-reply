@@ -108,7 +108,19 @@ In reference to [1], we compare the peformance of binary classification using Ga
 
 ## Human activity recognition (N = 2,633, p = 561)
 
-*TBC*
+|                  |      n = 50|     n = 200|    n = 1000| Rank|
+|:-----------------|-----------:|-----------:|-----------:|----:|
+|GPR (linear)      | 0.04 (0.01)| 0.00 (0.00)| 0.00 (0.00)|    1|
+|GPR (FBM-0.5)     | 0.16 (0.02)| 0.04 (0.01)| 0.00 (0.00)|    2|
+|GPR (FBM-MLE)     |          NA|          NA|          NA|    8|
+|I-prior (linear)  | 0.28 (0.02)| 0.25 (0.02)| 0.03 (0.01)|    7|
+|I-prior (FBM-0.5) | 0.21 (0.02)| 0.14 (0.01)| 0.04 (0.01)|    6|
+|I-prior (FBM-MLE) |          NA|          NA|          NA|    9|
+|RP-LDA5           | 0.18 (0.02)| 0.10 (0.01)| 0.01 (0.00)|    4|
+|RP-QDA5           | 0.15 (0.02)| 0.09 (0.01)| 0.00 (0.00)|    2|
+|RP-knn5           | 0.21 (0.02)| 0.11 (0.01)| 0.01 (0.00)|    5|
+
+![](figure/human.png)
 
 ## Handwritten digits (N = 1,500, p = 5000)
 
