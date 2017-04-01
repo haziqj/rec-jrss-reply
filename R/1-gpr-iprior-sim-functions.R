@@ -5,11 +5,15 @@ library(RPEnsemble)
 library(ggplot2)
 library(foreach)
 library(doSNOW)
-no.cores <- detectCores()   # or set number of cores
+no.cores <- detectCores() / 2   # or set number of cores
 
-# For push notifications using pushoverR
-userID <- "uyq2g37vnityt1b3yvpyicv6o9h456"
-appToken <- "avxnrig1qppsgsw9woghwwmxsobo4a"
+# For push notifications using pushoverR, set here
+# For more information, check out https://github.com/briandconnelly/pushoverr
+userID <- NULL
+appToken <- NULL
+
+# Create "save" folder in working directory
+if (!dir.exists("save")) dir.create("save")
 
 # Function to specify decimal places
 decPlac <- function(x, k = 2) format(round(x, k), nsmall = k)
