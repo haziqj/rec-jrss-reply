@@ -183,6 +183,8 @@ In reference to [1], we compare the peformance of binary classification using Ga
 ## [25] scales_0.4.1       jsonlite_1.0      
 ```
 
+## References
+
 [1] Cannings, T. I. and Samworth, R. J. (2017). Random projection ensemble classification. *J. Roy. Statist. Soc., Ser. B (with discussion)*, to appear.
 
 [2] Cannings, T. I. and Samworth, R. J. (2016). RPEnsemble: Random projection ensemble classification. R package, version 0.3. [https://cran.r-project.org/web/packages/RPEnsemble/index.html](https://cran.r-project.org/web/packages/RPEnsemble/index.html)
