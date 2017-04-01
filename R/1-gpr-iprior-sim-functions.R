@@ -6,7 +6,7 @@ library(ggplot2)
 library(foreach)
 library(doSNOW)
 no.cores <- detectCores()   # or set number of cores
-test
+
 # For push notifications using pushoverR
 userID <- "uyq2g37vnityt1b3yvpyicv6o9h456"
 appToken <- "avxnrig1qppsgsw9woghwwmxsobo4a"

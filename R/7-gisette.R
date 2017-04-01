@@ -20,17 +20,17 @@ N <- length(y)
 n <- c(50, 200, 1000)  # subsamples
 
 # Simulations
-res.gprlin <- mySim(type = "linear", gpr = TRUE, nsim = 12)  # linear GPR
-res.gprfbm <- mySim(type = "fbm", gpr = TRUE, nsim = 12)  # FBM GPR
-res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE, nsim = 8)  # FBM optim GPR
+res.gprlin <- mySim(type = "linear", gpr = TRUE)  # linear GPR
+res.gprfbm <- mySim(type = "fbm", gpr = TRUE)  # FBM GPR
+# res.gprfbmoptim <- mySim(type = "fbmoptim", gpr = TRUE)  # FBM optim GPR
 
-res.iplin <- mySim(type = "linear", nsim = 12)  # Canonical I-prior
-res.ipfbm <- mySim(type = "fbm", nsim = 12)  # FBM I-prior
-res.ipfbmoptim <- mySim(type = "fbmoptim", nsim = 8)  # FBM optim I-prior
+res.iplin <- mySim(type = "linear")  # Canonical I-prior
+res.ipfbm <- mySim(type = "fbm")  # FBM I-prior
+# res.ipfbmoptim <- mySim(type = "fbmoptim")  # FBM optim I-prior
 
 tab <- tabRes("GPR (linear)"      = res.gprlin,
               "GPR (FBM)"         = res.gprfbm,
-              "GPR (FBM MLE)"     = res.gprfbmoptim,
+              "GPR (FBM MLE)"     = NA,
               "I-prior (linear)"  = res.iplin,
               "I-prior (FBM)"     = res.ipfbm,
               "I-prior (FBM MLE)" = NA)
